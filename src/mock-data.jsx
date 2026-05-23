@@ -1,39 +1,42 @@
 // Rich mock content — photos, properties, location copy, homepage data
 
+// Verified Unsplash IDs only (broken photo IDs removed — many 1600xxx hashes 404)
+const IMG = (id) => `https://images.unsplash.com/${id}?w=900&q=80&auto=format&fit=crop`;
+
 const PHOTO_POOL = [
-  'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1605276374104-dee2b0b3a0c5?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600585152915-d208bec867a1?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600607687920-4e2a09ae1598?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600047509358-adc1a6e3d3e4?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600210492490-0946911129de?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600607688969-a5bfcd646154?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600585154363-67eb9e2e2099?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600585154084-4e5f7be83c7c?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600607688909-1c42b21c2e2a?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600566752734-4e64f0c0c0e0?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600585153490-76fb20a32601?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600047509784-0d646f6b0a1e?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1605276374375-3ac9c7ab8f3e?w=900&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600585152771-8e2f7a23b6c4?w=900&q=80&auto=format&fit=crop',
+  IMG('photo-1613490493576-7fde63acd811'),
+  IMG('photo-1600585154340-be6161a56a0c'),
+  IMG('photo-1582268611958-ebfd161ef9cf'),
+  IMG('photo-1512917774080-9991f1c4c750'),
+  IMG('photo-1564013799919-ab600027ffc6'),
+  IMG('photo-1600596542815-ffad4c1539a9'),
+  IMG('photo-1613553474179-e1eda3ea5734'),
+  IMG('photo-1570129477492-45c003edd2be'),
+  IMG('photo-1600607687939-ce8a6c25118c'),
+  IMG('photo-1600566753190-17f0baa2a6c3'),
+  IMG('photo-1600585154526-990dced4db0d'),
+  IMG('photo-1600047509807-ba8f99d2cdde'),
+  IMG('photo-1600210492486-724fe5c67fb0'),
+  IMG('photo-1600607687644-c7171b42498f'),
+  IMG('photo-1600566753086-00f18fb6b3ea'),
+  IMG('photo-1600585152915-d208bec867a1'),
+  IMG('photo-1600607688969-a5bfcd646154'),
+  IMG('photo-1600585154363-67eb9e2e2099'),
+  IMG('photo-1600566752355-35792bedcfea'),
+  IMG('photo-1600585153490-76fb20a32601'),
+  IMG('photo-1613977257363-707ba9348227'),
+  IMG('photo-1494526585095-c41746248156'),
+  IMG('photo-1522708323590-d24dbb6b0267'),
+  IMG('photo-1484154218962-a197022b5858'),
 ];
+
+const FALLBACK_IMG = PHOTO_POOL[0];
+
+const onImgError = (e) => {
+  if (e.target.dataset.fallback) return;
+  e.target.dataset.fallback = '1';
+  e.target.src = FALLBACK_IMG;
+};
 
 const PHOTOS = PHOTO_POOL.reduce((acc, url, i) => {
   acc[`p${i + 1}`] = url;
@@ -135,19 +138,19 @@ const LOCATION_GUIDES = {
     headline: 'Downtown — Burj Khalifa, Dubai Mall, and city pulse',
     body: 'Stay in the heart of the city with direct access to the Dubai Fountain, Opera District, and world-class shopping. Downtown listings skew toward designer apartments and hotel residences with skyline terraces. Perfect for short luxury breaks, fashion week, or guests who want everything walkable.',
     highlights: ['Burj Khalifa district', 'Luxury retail', 'Fine dining cluster'],
-    gallery: [PHOTO_POOL[4], PHOTO_POOL[10], PHOTO_POOL[17], PHOTO_POOL[24]],
+    gallery: [PHOTO_POOL[4], PHOTO_POOL[10], PHOTO_POOL[17], PHOTO_POOL[23]],
   },
   abudhabi: {
     headline: 'Saadiyat Island — culture, beaches, and calm luxury',
     body: 'Abu Dhabi\'s cultural coast pairs museum architecture with powder-soft beaches. Villas and camp-style pavilions here emphasize space, privacy, and resort amenities — think golf courses, beach clubs, and Louvre-adjacent dining. A quieter counterpoint to Dubai with equally premium finishes.',
     highlights: ['Museum district', 'Championship golf', 'Protected beaches'],
-    gallery: [PHOTO_POOL[6], PHOTO_POOL[12], PHOTO_POOL[20], PHOTO_POOL[25]],
+    gallery: [PHOTO_POOL[6], PHOTO_POOL[12], PHOTO_POOL[20], PHOTO_POOL[22]],
   },
   maldives: {
     headline: 'Malé Atoll — overwater calm and barefoot luxury',
     body: 'Crystal lagoons, reef snorkeling, and villas that blur the line between indoors and the Indian Ocean. Our Maldives collection includes overwater suites, beach camps with plunge pools, and eco-luxury tents with private decks. Ideal for honeymoons, dive trips, and digital detox weeks.',
     highlights: ['House reef access', 'Spa & wellness', 'Sunset cruises'],
-    gallery: [PHOTO_POOL[7], PHOTO_POOL[13], PHOTO_POOL[21], PHOTO_POOL[28]],
+    gallery: [PHOTO_POOL[7], PHOTO_POOL[13], PHOTO_POOL[21], PHOTO_POOL[23]],
   },
 };
 
@@ -218,6 +221,8 @@ const LISTING_FAQ = [
 Object.assign(window, {
   PHOTO_POOL,
   PHOTOS,
+  FALLBACK_IMG,
+  onImgError,
   PROPERTIES,
   LOCATION_GUIDES,
   CATEGORY_BLURBS,

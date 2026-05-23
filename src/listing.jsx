@@ -24,7 +24,7 @@ const PropertyCard = ({ property, onOpen, bookmarked, onBookmarkToggle, viewMode
       tabIndex={0}
     >
       <div className="prop-img-wrap">
-        <img src={property.img} alt={property.title} loading="lazy" />
+        <img src={property.img} alt={property.title} loading="lazy" onError={onImgError} />
         {property.badge && <span className="prop-badge">{property.badge}</span>}
         <button
           className={`bookmark-btn ${bookmarked ? 'is-active' : ''}`}
@@ -83,7 +83,7 @@ const ListingIntro = ({ activeCategory, activeLocation, count }) => {
       </div>
       <div className="listing-intro-gallery">
         {guide.gallery.map((src, i) => (
-          <img key={i} src={src} alt="" loading="lazy" className={`intro-img intro-img-${i + 1}`} />
+          <img key={i} src={src} alt="" loading="lazy" onError={onImgError} className={`intro-img intro-img-${i + 1}`} />
         ))}
       </div>
     </section>

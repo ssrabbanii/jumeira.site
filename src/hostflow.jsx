@@ -122,7 +122,7 @@ const ListingsTab = () => (
   <section className="listings-table">
     {HOST_LISTINGS.map(l => (
       <article key={l.id} className="host-listing">
-        <img src={l.img} alt="" />
+        <img src={l.img} alt="" onError={onImgError} />
         <div className="hl-body">
           <header>
             <strong>{l.title}</strong>
@@ -381,7 +381,7 @@ const ListPropertyPage = ({ setView }) => {
               <div className="photo-uploader">
                 {[PHOTOS.villa1, PHOTOS.villa3, PHOTOS.villa5, PHOTOS.villa6].map((src, i) => (
                   <div className="photo-tile" key={i}>
-                    <img src={src} alt="" />
+                    <img src={src} alt="" onError={onImgError} />
                     {i === 0 && <span className="photo-cover">Cover</span>}
                   </div>
                 ))}
@@ -441,7 +441,7 @@ const ListPropertyPage = ({ setView }) => {
           {step.id === 'review' && (
             <div className="review-summary">
               <div className="rev-preview">
-                <img src={PHOTOS.villa1} alt="" />
+                <img src={PHOTOS.villa1} alt="" onError={onImgError} />
                 <div>
                   <span className="prop-label">VILLA</span>
                   <strong>{data.title}</strong>

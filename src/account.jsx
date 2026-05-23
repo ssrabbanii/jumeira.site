@@ -129,7 +129,7 @@ const TripsPanel = ({ onOpenProperty }) => {
         <div className="trip-list">
           {trips.map(t => (
             <article key={t.id} className="trip-card">
-              <img src={t.img} alt="" />
+              <img src={t.img} alt="" onError={onImgError} />
               <div className="trip-body">
                 <span className="prop-label">VILLA · {t.refId}</span>
                 <strong>{t.title}</strong>
@@ -172,7 +172,7 @@ const SavedPanel = ({ bookmarks, setBookmarks, onOpenProperty }) => {
         <button className="wishlist-cover">
           <div className="cover-stack">
             {[PHOTOS.villa3, PHOTOS.villa6, PHOTOS.villa7, PHOTOS.villa5].map((src, i) => (
-              <div className="stack-tile" key={i}><img src={src} alt="" /></div>
+              <div className="stack-tile" key={i}><img src={src} alt="" onError={onImgError} /></div>
             ))}
           </div>
           <div className="wishlist-meta">
@@ -183,7 +183,7 @@ const SavedPanel = ({ bookmarks, setBookmarks, onOpenProperty }) => {
         <button className="wishlist-cover">
           <div className="cover-stack alt">
             {[PHOTOS.villa1, PHOTOS.villa4].map((src, i) => (
-              <div className="stack-tile" key={i}><img src={src} alt="" /></div>
+              <div className="stack-tile" key={i}><img src={src} alt="" onError={onImgError} /></div>
             ))}
             <div className="stack-tile empty">+5</div>
           </div>

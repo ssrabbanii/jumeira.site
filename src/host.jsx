@@ -23,7 +23,7 @@ const HostPage = ({ setView }) => {
           </div>
         </div>
         <div className="host-hero-art">
-          <img src={PHOTOS.villa1} alt="" />
+          <img src={PHOTOS.villa1} alt="" onError={onImgError} />
           <div className="float-card">
             <div className="float-card-head">
               <span className="dot-live" /> Booking confirmed

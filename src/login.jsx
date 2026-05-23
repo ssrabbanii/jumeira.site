@@ -18,7 +18,7 @@ const LoginPage = ({ setView, onLogin }) => {
   return (
     <main className="auth">
       <div className="auth-art">
-        <img src={PHOTOS.villa3} alt="" />
+        <img src={PHOTOS.villa3} alt="" onError={onImgError} />
         <div className="auth-art-overlay" />
         <div className="auth-quote">
           <span className="cta-eyebrow">JUMEIRA · CURATED LUXURY</span>

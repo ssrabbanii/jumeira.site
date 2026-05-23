@@ -13,10 +13,10 @@ const DetailPage = ({ property, onBack, onReserve, bookmarks, setBookmarks }) =>
 
   const galleryImages = [
     p.img,
-    PHOTOS.villa1,
-    PHOTOS.villa4,
-    PHOTOS.villa5,
-    PHOTOS.villa6,
+    PHOTO_POOL[1],
+    PHOTO_POOL[4],
+    PHOTO_POOL[8],
+    PHOTO_POOL[12],
   ];
 
   const [nights, setNights] = React.useState(5);
@@ -63,12 +63,12 @@ const DetailPage = ({ property, onBack, onReserve, bookmarks, setBookmarks }) =>
 
       <section className="gallery">
         <div className="gallery-main">
-          <img src={galleryImages[0]} alt="" />
+          <img src={galleryImages[0]} alt="" onError={onImgError} />
         </div>
         <div className="gallery-side">
           {galleryImages.slice(1, 5).map((src, i) => (
             <div className="gallery-tile" key={i}>
-              <img src={src} alt="" />
+              <img src={src} alt="" onError={onImgError} />
             </div>
           ))}
           <button className="show-all">Show all photos</button>

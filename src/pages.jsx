@@ -31,7 +31,7 @@ const BuyPage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
           </div>
         </div>
         <div className="buy-hero-art">
-          <img src={PHOTOS.villa1} alt="" />
+          <img src={PHOTOS.villa1} alt="" onError={onImgError} />
           <div className="float-tag">
             <span className="cta-eyebrow" style={{color: '#1E9B5C'}}>JUST LISTED</span>
             <strong>4-bed Beachside Pavilion</strong>
@@ -129,7 +129,7 @@ const RentPage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
     <main className="rent-page">
       <section className="rent-hero">
         <div className="rent-bg">
-          <img src={PHOTOS.villa6} alt="" />
+          <img src={PHOTOS.villa6} alt="" onError={onImgError} />
           <div className="rent-overlay" />
         </div>
         <div className="rent-hero-inner">
@@ -212,7 +212,7 @@ const RentPage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
           <button className="cta-pill" onClick={() => setView('listing')}>Find me a long stay <IconArrowRight size={16} stroke={2} /></button>
         </div>
         <div className="rent-cta-art">
-          <img src={PHOTOS.villa5} alt="" />
+          <img src={PHOTOS.villa5} alt="" onError={onImgError} />
         </div>
       </section>
     </main>

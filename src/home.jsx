@@ -17,7 +17,7 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
     <main className="home">
       <section className="hero">
         <div className="hero-bg">
-          <img src={PHOTO_POOL[2]} alt="" />
+          <img src={PHOTO_POOL[2]} alt="" onError={onImgError} />
           <div className="hero-overlay" />
         </div>
         <div className="hero-inner">
@@ -88,7 +88,7 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
         <div className="dest-grid dest-grid-expanded">
           {destinations.map((d, i) => (
             <button key={d.name} className={`dest-card ${i === 0 ? 'is-tall' : ''}`} onClick={() => onBrowse('all', DEST_TO_LOC[d.name] || 'jumeirah')}>
-              <img src={d.img} alt={d.name} loading="lazy" />
+              <img src={d.img} alt={d.name} loading="lazy" onError={onImgError} />
               <div className="dest-info">
                 <strong>{d.name}</strong>
                 <span>{d.count}</span>
@@ -109,7 +109,7 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
         <div className="editorial-grid">
           {HOME_EDITORIAL.map((e) => (
             <button key={e.title} className="editorial-card" onClick={() => onBrowse(e.cat, e.loc)}>
-              <img src={e.img} alt="" loading="lazy" />
+              <img src={e.img} alt="" loading="lazy" onError={onImgError} />
               <div className="editorial-body">
                 <span className="editorial-tag">{e.tag}</span>
                 <h3>{e.title}</h3>
@@ -199,7 +199,7 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
           <button className="cta-pill" onClick={() => setView('host')}>Become a host <IconArrowRight size={16} stroke={2} /></button>
         </div>
         <div className="host-cta-art">
-          <img src={PHOTO_POOL[0]} alt="" />
+          <img src={PHOTO_POOL[0]} alt="" onError={onImgError} />
         </div>
       </section>
     </main>

@@ -39,7 +39,7 @@ const CheckoutPage = ({ property, setView, goToTrips }) => {
           <h1>You're going to Jumeirah.</h1>
           <p className="muted">Your reservation is confirmed. Layla, your host, will be in touch within 24 hours.</p>
           <div className="conf-summary">
-            <img src={p.img} alt="" />
+            <img src={p.img} alt="" onError={onImgError} />
             <div>
               <span className="prop-label">VILLA · CONFIRMATION {reservationId}</span>
               <strong>{p.title}</strong>
@@ -240,7 +240,7 @@ const CheckoutPage = ({ property, setView, goToTrips }) => {
         <aside className="checkout-side">
           <div className="side-card">
             <div className="side-head">
-              <img src={p.img} alt="" />
+              <img src={p.img} alt="" onError={onImgError} />
               <div>
                 <span className="prop-label">VILLA</span>
                 <strong>{p.title}</strong>
