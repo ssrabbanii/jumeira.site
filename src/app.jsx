@@ -73,15 +73,52 @@ const Footer = ({ setView }) => (
   </footer>
 );
 
+const readRouteFromUrl = () => {
+  const parsed = parseListingPath(window.location.pathname);
+  if (parsed) return parsed;
+  return { view: 'listing', categoryId: 'villa', locationId: 'jumeirah' };
+};
+
 const App = () => {
-  const [view, setView] = React.useState('listing');
+  const initialRoute = readRouteFromUrl();
+  const [view, setView] = React.useState(initialRoute.view || 'listing');
   const [searchValue, setSearchValue] = React.useState('');
-  const [activeCategory, setActiveCategory] = React.useState('villa');
+  const [activeCategory, setActiveCategory] = React.useState(initialRoute.categoryId || 'villa');
+  const [activeLocation, setActiveLocation] = React.useState(initialRoute.locationId || 'jumeirah');
   const [bookmarks, setBookmarks] = React.useState({ 1: true });
   const [activeProperty, setActiveProperty] = React.useState(null);
   const [isLoggedIn, setIsLoggedIn] = React.useState(true);
   const [accountTab, setAccountTab] = React.useState('trips');
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+  const syncListingUrl = React.useCallback((categoryId, locationId) => {
+    const path = buildListingPath(categoryId, locationId);
+    if (window.location.pathname !== path) {
+      window.history.pushState({ view: 'listing', categoryId, locationId }, '', path);
+    }
+  }, []);
+
+  const browseListing = React.useCallback((categoryId, locationId) => {
+    const cat = categoryId || activeCategory;
+    const loc = locationId || activeLocation;
+    setActiveCategory(cat);
+    setActiveLocation(loc);
+    setView('listing');
+    syncListingUrl(cat, loc);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [activeCategory, activeLocation, syncListingUrl]);
+
+  React.useEffect(() => {
+    const onPop = () => {
+      const parsed = parseListingPath(window.location.pathname);
+      if (!parsed) return;
+      if (parsed.view) setView(parsed.view);
+      if (parsed.categoryId) setActiveCategory(parsed.categoryId);
+      if (parsed.locationId) setActiveLocation(parsed.locationId);
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
 
   // Apply tweaks via CSS variables
   React.useEffect(() => {
@@ -105,8 +142,14 @@ const App = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  React.useEffect(() => {
+    if (view === 'listing') syncListingUrl(activeCategory, activeLocation);
+  }, []);
+
   const goView = (v) => {
     setView(v);
+    if (v === 'home') window.history.pushState({ view: 'home' }, '', '/home');
+    else if (v === 'listing') syncListingUrl(activeCategory, activeLocation);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -128,14 +171,19 @@ const App = () => {
         onAccountTab={goAccountTab}
       />
       {(view === 'listing' || view === 'home') && (
-        <CategoryNav activeCategory={activeCategory} setActiveCategory={(c) => { setActiveCategory(c); goView('listing'); }} />
+        <CategoryNav
+          activeCategory={activeCategory}
+          activeLocation={activeLocation}
+          onSelectCategory={(c) => browseListing(c, activeLocation)}
+          onSelectLocation={(loc) => browseListing(activeCategory, loc)}
+        />
       )}
 
       {view === 'listing' && (
         <ListingPage
           onOpenProperty={openProperty}
           activeCategory={activeCategory}
-          setActiveCategory={setActiveCategory}
+          activeLocation={activeLocation}
           bookmarks={bookmarks}
           setBookmarks={setBookmarks}
         />
@@ -157,7 +205,13 @@ const App = () => {
         />
       )}
       {view === 'home' && (
-        <HomePage setView={goView} onOpenProperty={openProperty} bookmarks={bookmarks} setBookmarks={setBookmarks} />
+        <HomePage
+          setView={goView}
+          onBrowse={browseListing}
+          onOpenProperty={openProperty}
+          bookmarks={bookmarks}
+          setBookmarks={setBookmarks}
+        />
       )}
       {view === 'login' && (
         <LoginPage setView={goView} onLogin={() => { setIsLoggedIn(true); goView('home'); }} />

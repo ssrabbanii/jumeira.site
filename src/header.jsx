@@ -285,29 +285,30 @@ const MiniMap = ({ size = 58 }) => (
   </svg>
 );
 
-const CategoryNav = ({ activeCategory, setActiveCategory }) => {
-  const cats = [
-    { id: 'all', label: 'All', Icon: IconGridSquares },
-    { id: 'house', label: 'House', Icon: IconHouse },
-    { id: 'hotel', label: 'Hotel', Icon: IconHotel },
-    { id: 'villa', label: 'Villa', Icon: IconVilla },
-    { id: 'apartment', label: 'Apartment', Icon: IconApartment },
-    { id: 'camp', label: 'Camp House', Icon: IconCamp },
-  ];
+const CategoryNav = ({ activeCategory, activeLocation, onSelectCategory, onSelectLocation }) => {
+  const cats = CATEGORIES;
   const desktopCats = cats.filter(c => c.id !== 'all');
-  const locations = [
-    { id: 'jumeirah', name: 'Dubai City', area: 'Jumeirah' },
-    { id: 'palm', name: 'Dubai City', area: 'Palm Jumeirah' },
-    { id: 'marina', name: 'Dubai City', area: 'Dubai Marina' },
-    { id: 'downtown', name: 'Dubai City', area: 'Downtown' },
-    { id: 'abudhabi', name: 'Abu Dhabi', area: 'Saadiyat Island' },
-    { id: 'maldives', name: 'Maldives', area: 'Malé Atoll' },
-  ];
 
-  const [sheet, setSheet] = React.useState(null); // null | 'cat' | 'loc'
-  const [activeLoc, setActiveLoc] = React.useState('jumeirah');
-  const activeCat = cats.find(c => c.id === activeCategory) || cats.find(c => c.id === 'villa');
-  const activeLocObj = locations.find(l => l.id === activeLoc) || locations[0];
+  const [sheet, setSheet] = React.useState(null);
+  const [catOpen, setCatOpen] = React.useState(false);
+  const [locOpen, setLocOpen] = React.useState(false);
+  const catRef = React.useRef(null);
+  const locRef = React.useRef(null);
+
+  const activeCat = getCategory(activeCategory);
+  const activeLocObj = getLocation(activeLocation);
+
+  const pickCategory = (id) => {
+    onSelectCategory(id);
+    setCatOpen(false);
+    setSheet(null);
+  };
+
+  const pickLocation = (id) => {
+    onSelectLocation(id);
+    setLocOpen(false);
+    setSheet(null);
+  };
 
   React.useEffect(() => {
     if (!sheet) return undefined;
@@ -320,21 +321,64 @@ const CategoryNav = ({ activeCategory, setActiveCategory }) => {
     };
   }, [sheet]);
 
+  React.useEffect(() => {
+    if (!catOpen && !locOpen) return undefined;
+    const onClick = (e) => {
+      if (catRef.current && !catRef.current.contains(e.target)) setCatOpen(false);
+      if (locRef.current && !locRef.current.contains(e.target)) setLocOpen(false);
+    };
+    const onKey = (e) => {
+      if (e.key === 'Escape') { setCatOpen(false); setLocOpen(false); }
+    };
+    document.addEventListener('mousedown', onClick);
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onClick);
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [catOpen, locOpen]);
+
   return (
     <div className="cat-nav">
       {/* Desktop UI */}
-      <button className="cat-all desktop-only" onClick={() => setActiveCategory('all')}>
-        <span className="cat-all-icon"><IconGridSquares size={22} stroke={2} /></span>
-        <span className="cat-all-text">ALL CATEGORY</span>
-        <IconChevron size={18} stroke={2} />
-      </button>
+      <div className="cat-all-wrap desktop-only" ref={catRef}>
+        <button
+          className={`cat-all ${catOpen ? 'is-open' : ''}`}
+          onClick={() => { setCatOpen(!catOpen); setLocOpen(false); }}
+          aria-expanded={catOpen}
+          aria-haspopup="true"
+        >
+          <span className="cat-all-icon"><IconGridSquares size={22} stroke={2} /></span>
+          <span className="cat-all-text">ALL CATEGORY</span>
+          <IconChevron size={18} stroke={2} />
+        </button>
+        {catOpen && (
+          <div className="nav-dropdown cat-dropdown">
+            <p className="nav-dropdown-label">Browse by type</p>
+            {cats.map(c => (
+              <button
+                key={c.id}
+                className={`nav-dropdown-row ${activeCategory === c.id ? 'is-on' : ''}`}
+                onClick={() => pickCategory(c.id)}
+              >
+                <span className="nav-dropdown-icon"><c.Icon size={20} stroke={1.8} /></span>
+                <span className="nav-dropdown-text">
+                  <strong>{c.id === 'all' ? c.labelLong : c.label}</strong>
+                  <small>{c.subtitle}</small>
+                </span>
+                {activeCategory === c.id && <span className="sheet-check"><IconCheck size={14} stroke={2.4} /></span>}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
 
       <div className="cat-list desktop-only">
         {desktopCats.map(({ id, label, Icon: I }) => (
           <button
             key={id}
             className={`cat-item ${activeCategory === id ? 'is-active' : ''}`}
-            onClick={() => setActiveCategory(id)}
+            onClick={() => pickCategory(id)}
           >
             <I size={22} stroke={1.8} />
             <span>{label}</span>
@@ -342,14 +386,45 @@ const CategoryNav = ({ activeCategory, setActiveCategory }) => {
         ))}
       </div>
 
-      <button className="loc-selector desktop-only">
-        <MiniMap size={44} />
-        <div className="loc-text">
-          <div className="loc-main">{activeLocObj.name}</div>
-          <div className="loc-sub">{activeLocObj.area}</div>
-        </div>
-        <IconChevron size={18} stroke={2} />
-      </button>
+      <div className="loc-wrap desktop-only" ref={locRef}>
+        <button
+          className={`loc-selector ${locOpen ? 'is-open' : ''}`}
+          onClick={() => { setLocOpen(!locOpen); setCatOpen(false); }}
+          aria-expanded={locOpen}
+          aria-haspopup="true"
+        >
+          <MiniMap size={44} />
+          <div className="loc-text">
+            <div className="loc-main">{activeLocObj.city}</div>
+            <div className="loc-sub">{activeLocObj.area}</div>
+          </div>
+          <IconChevron size={18} stroke={2} />
+        </button>
+        {locOpen && (
+          <div className="nav-dropdown loc-dropdown">
+            <p className="nav-dropdown-label">Choose destination</p>
+            {CITY_GROUPS.map(group => (
+              <div key={group.id} className="loc-group">
+                <div className="loc-group-title">{group.name}</div>
+                {LOCATIONS.filter(l => l.cityGroup === group.id).map(l => (
+                  <button
+                    key={l.id}
+                    className={`nav-dropdown-row ${activeLocation === l.id ? 'is-on' : ''}`}
+                    onClick={() => pickLocation(l.id)}
+                  >
+                    <span className="nav-dropdown-icon"><IconMapPin size={20} stroke={1.8} /></span>
+                    <span className="nav-dropdown-text">
+                      <strong>{l.area}</strong>
+                      <small>{l.city}</small>
+                    </span>
+                    {activeLocation === l.id && <span className="sheet-check"><IconCheck size={14} stroke={2.4} /></span>}
+                  </button>
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* Mobile UI — two beautiful pill dropdowns */}
       <div className="cat-mobile mobile-only">
@@ -359,7 +434,7 @@ const CategoryNav = ({ activeCategory, setActiveCategory }) => {
           </span>
           <span className="cat-pill-text">
             <small>Category</small>
-            <strong>{activeCat.label === 'All' ? 'All categories' : activeCat.label}</strong>
+            <strong>{activeCat.id === 'all' ? activeCat.labelLong : activeCat.label}</strong>
           </span>
           <IconChevron size={16} stroke={2} />
         </button>
@@ -369,7 +444,7 @@ const CategoryNav = ({ activeCategory, setActiveCategory }) => {
           </span>
           <span className="cat-pill-text">
             <small>Where</small>
-            <strong>{activeLocObj.name} · {activeLocObj.area}</strong>
+            <strong>{activeLocObj.city} · {activeLocObj.area}</strong>
           </span>
           <IconChevron size={16} stroke={2} />
         </button>
@@ -393,19 +468,12 @@ const CategoryNav = ({ activeCategory, setActiveCategory }) => {
                   <li key={c.id}>
                     <button
                       className={`sheet-row ${activeCategory === c.id ? 'is-on' : ''}`}
-                      onClick={() => { setActiveCategory(c.id); setSheet(null); }}
+                      onClick={() => pickCategory(c.id)}
                     >
                       <span className="sheet-row-icon"><c.Icon size={22} stroke={1.8} /></span>
                       <span className="sheet-row-label">
-                        <strong>{c.label === 'All' ? 'All categories' : c.label}</strong>
-                        <small>{
-                          c.id === 'all' ? 'Browse every kind of stay'
-                          : c.id === 'house' ? 'Family homes & townhouses'
-                          : c.id === 'hotel' ? 'Boutique & branded hotels'
-                          : c.id === 'villa' ? 'Standalone luxury homes'
-                          : c.id === 'apartment' ? 'In residential buildings'
-                          : 'Unique outdoor stays'
-                        }</small>
+                        <strong>{c.id === 'all' ? c.labelLong : c.label}</strong>
+                        <small>{c.subtitle}</small>
                       </span>
                       {activeCategory === c.id && (
                         <span className="sheet-check"><IconCheck size={14} stroke={2.4} /></span>
@@ -417,22 +485,27 @@ const CategoryNav = ({ activeCategory, setActiveCategory }) => {
             )}
             {sheet === 'loc' && (
               <ul className="sheet-list">
-                {locations.map(l => (
-                  <li key={l.id}>
-                    <button
-                      className={`sheet-row ${activeLoc === l.id ? 'is-on' : ''}`}
-                      onClick={() => { setActiveLoc(l.id); setSheet(null); }}
-                    >
-                      <span className="sheet-row-icon"><IconMapPin size={22} stroke={1.8} /></span>
-                      <span className="sheet-row-label">
-                        <strong>{l.area}</strong>
-                        <small>{l.name}</small>
-                      </span>
-                      {activeLoc === l.id && (
-                        <span className="sheet-check"><IconCheck size={14} stroke={2.4} /></span>
-                      )}
-                    </button>
-                  </li>
+                {CITY_GROUPS.map(group => (
+                  <React.Fragment key={group.id}>
+                    <li className="sheet-group-label">{group.name}</li>
+                    {LOCATIONS.filter(l => l.cityGroup === group.id).map(l => (
+                      <li key={l.id}>
+                        <button
+                          className={`sheet-row ${activeLocation === l.id ? 'is-on' : ''}`}
+                          onClick={() => pickLocation(l.id)}
+                        >
+                          <span className="sheet-row-icon"><IconMapPin size={22} stroke={1.8} /></span>
+                          <span className="sheet-row-label">
+                            <strong>{l.area}</strong>
+                            <small>{l.city}</small>
+                          </span>
+                          {activeLocation === l.id && (
+                            <span className="sheet-check"><IconCheck size={14} stroke={2.4} /></span>
+                          )}
+                        </button>
+                      </li>
+                    ))}
+                  </React.Fragment>
                 ))}
               </ul>
             )}
@@ -618,8 +691,13 @@ const CategoryNav = ({ activeCategory, setActiveCategory }) => {
     max-width: 1440px;
     margin: 0 auto;
   }
-  .cat-all {
+  .cat-all-wrap {
     flex: 0 0 260px;
+    position: relative;
+  }
+  .cat-all {
+    width: 100%;
+    height: 100%;
     display: flex; align-items: center;
     gap: 12px;
     padding: 0 22px;
@@ -679,8 +757,15 @@ const CategoryNav = ({ activeCategory, setActiveCategory }) => {
     box-shadow: 0 -4px 16px rgba(79, 54, 232, 0.25);
   }
 
-  .loc-selector {
+  .loc-wrap {
     flex: 0 0 260px;
+    position: relative;
+  }
+  .cat-all.is-open, .loc-selector.is-open { box-shadow: inset 0 -3px 0 var(--purple); }
+
+  .loc-selector {
+    width: 100%;
+    height: 100%;
     display: flex; align-items: center;
     gap: 12px;
     padding: 0 22px 0 18px;
@@ -696,6 +781,70 @@ const CategoryNav = ({ activeCategory, setActiveCategory }) => {
   }
   .loc-main { font-size: 15px; font-weight: 700; color: var(--navy); }
   .loc-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+  .nav-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 300px;
+    max-height: 420px;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    box-shadow: 0 24px 60px rgba(7, 7, 43, 0.18);
+    padding: 10px;
+    z-index: 60;
+    animation: menuFade .15s ease;
+  }
+  .loc-dropdown { left: auto; right: 0; min-width: 320px; }
+  .nav-dropdown-label {
+    margin: 6px 12px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .nav-dropdown-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 12px;
+    text-align: left;
+    transition: background .12s;
+  }
+  .nav-dropdown-row:hover { background: var(--lav-bg); }
+  .nav-dropdown-row.is-on { background: var(--lav-soft); }
+  .nav-dropdown-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: var(--lav-bg);
+    display: grid; place-items: center;
+    color: var(--purple);
+    flex-shrink: 0;
+  }
+  .nav-dropdown-text { flex: 1; min-width: 0; }
+  .nav-dropdown-text strong { display: block; font-size: 14px; font-weight: 700; color: var(--navy); }
+  .nav-dropdown-text small { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .loc-group { margin-bottom: 4px; }
+  .loc-group-title {
+    padding: 8px 12px 4px;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--navy);
+  }
+  .sheet-group-label {
+    padding: 14px 20px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    list-style: none;
+  }
   `;
   const s = document.createElement('style');
   s.id = 'header-styles';

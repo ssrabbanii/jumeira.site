@@ -1,6 +1,6 @@
 // Jumeira homepage
 
-const HomePage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
+const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }) => {
   const destinations = [
     { name: 'Dubai City', count: '649 stays', img: PHOTOS.villa1 },
     { name: 'Palm Jumeirah', count: '212 stays', img: PHOTOS.villa3 },
@@ -51,7 +51,7 @@ const HomePage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
               <span>Guests</span>
               <div className="hs-val"><IconUsers size={16} stroke={1.8} /> 4 guests</div>
             </div>
-            <button className="hs-cta" onClick={() => setView('listing')}>
+            <button className="hs-cta" onClick={() => onBrowse('villa', 'jumeirah')}>
               <IconSearch size={20} stroke={2} /> Search
             </button>
           </div>
@@ -59,7 +59,7 @@ const HomePage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
           <div className="hero-marquee">
             <span className="muted">Popular searches —</span>
             {['Beachfront villas', 'Private pool', 'Architect homes', 'Family suites', 'City skyline apartments'].map(t => (
-              <button key={t} className="marquee-chip" onClick={() => setView('listing')}>{t}</button>
+              <button key={t} className="marquee-chip" onClick={() => onBrowse('all', 'jumeirah')}>{t}</button>
             ))}
           </div>
         </div>
@@ -74,7 +74,7 @@ const HomePage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
         </div>
         <div className="cat-cards">
           {featuredCats.map(c => (
-            <button key={c.id} className="cat-card" onClick={() => setView('listing')}>
+            <button key={c.id} className="cat-card" onClick={() => onBrowse(c.id, 'jumeirah')}>
               <span className="cat-card-icon"><c.Icon size={26} stroke={1.7} /></span>
               <strong>{c.label}</strong>
               <span className="muted">{c.count}</span>
@@ -89,11 +89,11 @@ const HomePage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
             <h2>Popular destinations</h2>
             <p className="muted">Where guests are flocking this season.</p>
           </div>
-          <button className="link-arrow" onClick={() => setView('listing')}>See all <IconArrowRight size={16} stroke={2} /></button>
+          <button className="link-arrow" onClick={() => onBrowse('all', 'jumeirah')}>See all <IconArrowRight size={16} stroke={2} /></button>
         </div>
         <div className="dest-grid">
           {destinations.map((d, i) => (
-            <button key={d.name} className={`dest-card ${i === 0 ? 'is-tall' : ''}`} onClick={() => setView('listing')}>
+            <button key={d.name} className={`dest-card ${i === 0 ? 'is-tall' : ''}`} onClick={() => onBrowse('all', DEST_TO_LOC[d.name] || 'jumeirah')}>
               <img src={d.img} alt={d.name} loading="lazy" />
               <div className="dest-info">
                 <strong>{d.name}</strong>
@@ -110,7 +110,7 @@ const HomePage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
             <h2>Featured luxury stays</h2>
             <p className="muted">Hand-picked by our editors.</p>
           </div>
-          <button className="link-arrow" onClick={() => setView('listing')}>See all <IconArrowRight size={16} stroke={2} /></button>
+          <button className="link-arrow" onClick={() => onBrowse('villa', 'jumeirah')}>See all <IconArrowRight size={16} stroke={2} /></button>
         </div>
         <div className="prop-grid">
           {PROPERTIES.slice(0, 3).map(p => (

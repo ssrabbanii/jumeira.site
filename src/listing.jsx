@@ -14,96 +14,18 @@ const PHOTOS = {
 };
 
 const PROPERTIES = [
-  {
-    id: 1,
-    img: PHOTOS.villa3,
-    label: 'VILLA',
-    title: 'Five Palm Jumeirah Beachfront Villa — Pool, Jacuzzi',
-    meta: '8 guests · 4 bedrooms',
-    priceFrom: '1.920',
-    rating: 4.6,
-    bookmarked: true,
-  },
-  {
-    id: 2,
-    img: PHOTOS.villa2,
-    label: 'VILLA',
-    title: 'Two Bedroom Arabian Summerhouse Family Suite',
-    meta: '6 guests · 3 bedrooms',
-    priceFrom: '890',
-    rating: 3.2,
-    bookmarked: false,
-  },
-  {
-    id: 3,
-    img: PHOTOS.villa7,
-    label: 'VILLA',
-    title: 'Beach Front Villa in Five Palm Jumeirah Hotel',
-    meta: '6 guests · 2 bedrooms',
-    priceFrom: '750',
-    rating: 5.0,
-    bookmarked: false,
-  },
-  {
-    id: 4,
-    img: PHOTOS.villa4,
-    label: 'VILLA',
-    title: 'Arabian Summerhouse Superior',
-    meta: '8 guests · 3 bedrooms',
-    priceFrom: '1.299',
-    rating: 3.8,
-    bookmarked: false,
-  },
-  {
-    id: 5,
-    img: PHOTOS.villa5,
-    label: 'VILLA',
-    title: 'Stylish Luxury Sunshine Villa Perfect for Families',
-    meta: '4 guests · 2 bedrooms',
-    priceFrom: '1.000',
-    rating: 4.9,
-    bookmarked: false,
-  },
-  {
-    id: 6,
-    img: PHOTOS.villa6,
-    label: 'VILLA',
-    title: 'Spacious Garden Villa near the Beach',
-    meta: '6 guests · 3 bedrooms',
-    priceFrom: '1.450',
-    rating: 3.6,
-    bookmarked: false,
-  },
-  {
-    id: 7,
-    img: PHOTOS.villa8,
-    label: 'VILLA',
-    title: 'Palm-Lined Retreat with Private Plunge Pool',
-    meta: '5 guests · 2 bedrooms',
-    priceFrom: '1.180',
-    rating: 4.7,
-    bookmarked: false,
-  },
-  {
-    id: 8,
-    img: PHOTOS.villa1,
-    label: 'VILLA',
-    title: 'Architect-Designed Coastal Pavilion Villa',
-    meta: '10 guests · 5 bedrooms',
-    priceFrom: '2.450',
-    rating: 4.8,
-    bookmarked: false,
-  },
-  {
-    id: 9,
-    img: PHOTOS.villa6,
-    label: 'VILLA',
-    title: 'Terraced Marina Villa with Skyline View',
-    meta: '6 guests · 3 bedrooms',
-    priceFrom: '1.650',
-    rating: 4.4,
-    bookmarked: false,
-  },
+  { id: 1, img: PHOTOS.villa3, category: 'villa', locationId: 'palm', label: 'VILLA', title: 'Five Palm Jumeirah Beachfront Villa — Pool, Jacuzzi', meta: '8 guests · 4 bedrooms', priceFrom: '1.920', rating: 4.6, bookmarked: true },
+  { id: 2, img: PHOTOS.villa2, category: 'house', locationId: 'jumeirah', label: 'HOUSE', title: 'Two Bedroom Arabian Summerhouse Family Suite', meta: '6 guests · 3 bedrooms', priceFrom: '890', rating: 3.2, bookmarked: false },
+  { id: 3, img: PHOTOS.villa7, category: 'hotel', locationId: 'palm', label: 'HOTEL', title: 'Beach Front Suite in Five Palm Jumeirah Hotel', meta: '6 guests · 2 bedrooms', priceFrom: '750', rating: 5.0, bookmarked: false },
+  { id: 4, img: PHOTOS.villa4, category: 'villa', locationId: 'jumeirah', label: 'VILLA', title: 'Arabian Summerhouse Superior', meta: '8 guests · 3 bedrooms', priceFrom: '1.299', rating: 3.8, bookmarked: false },
+  { id: 5, img: PHOTOS.villa5, category: 'apartment', locationId: 'downtown', label: 'APARTMENT', title: 'Stylish Luxury Downtown Apartment with Skyline View', meta: '4 guests · 2 bedrooms', priceFrom: '1.000', rating: 4.9, bookmarked: false },
+  { id: 6, img: PHOTOS.villa6, category: 'villa', locationId: 'marina', label: 'VILLA', title: 'Spacious Garden Villa near the Marina', meta: '6 guests · 3 bedrooms', priceFrom: '1.450', rating: 3.6, bookmarked: false },
+  { id: 7, img: PHOTOS.villa8, category: 'camp', locationId: 'maldives', label: 'CAMP HOUSE', title: 'Palm-Lined Beach Camp with Private Plunge Pool', meta: '5 guests · 2 bedrooms', priceFrom: '1.180', rating: 4.7, bookmarked: false },
+  { id: 8, img: PHOTOS.villa1, category: 'villa', locationId: 'jumeirah', label: 'VILLA', title: 'Architect-Designed Coastal Pavilion Villa', meta: '10 guests · 5 bedrooms', priceFrom: '2.450', rating: 4.8, bookmarked: false },
+  { id: 9, img: PHOTOS.villa6, category: 'house', locationId: 'marina', label: 'HOUSE', title: 'Terraced Marina Townhouse with Skyline View', meta: '6 guests · 3 bedrooms', priceFrom: '1.650', rating: 4.4, bookmarked: false },
+  { id: 10, img: PHOTOS.villa2, category: 'hotel', locationId: 'downtown', label: 'HOTEL', title: 'Boutique Downtown Hotel Suite — Burj Khalifa View', meta: '2 guests · 1 bedroom', priceFrom: '520', rating: 4.5, bookmarked: false },
+  { id: 11, img: PHOTOS.villa5, category: 'apartment', locationId: 'marina', label: 'APARTMENT', title: 'Marina Walk Penthouse with Private Terrace', meta: '6 guests · 3 bedrooms', priceFrom: '1.320', rating: 4.6, bookmarked: false },
+  { id: 12, img: PHOTOS.villa4, category: 'camp', locationId: 'abudhabi', label: 'CAMP HOUSE', title: 'Desert Glamping Pavilion on Saadiyat Island', meta: '4 guests · 2 bedrooms', priceFrom: '680', rating: 4.3, bookmarked: false },
 ];
 
 const Stars = ({ rating, size = 17 }) => {
@@ -158,11 +80,11 @@ const PropertyCard = ({ property, onOpen, bookmarked, onBookmarkToggle, viewMode
   );
 };
 
-const ResultsHeader = ({ viewMode, setViewMode, openFilters, count }) => (
+const ResultsHeader = ({ viewMode, setViewMode, openFilters, title, subtitle }) => (
   <div className="results-header">
     <div>
-      <h1 className="results-title"><span className="dash">—</span> Dubai City, Jumeirah Villa</h1>
-      <p className="results-sub">{count} Villas available in Dubai City</p>
+      <h1 className="results-title"><span className="dash">—</span> {title}</h1>
+      <p className="results-sub">{subtitle}</p>
     </div>
     <div className="results-controls">
       <button
@@ -288,10 +210,21 @@ const FilterDrawer = ({ open, onClose, filters, setFilters }) => {
   );
 };
 
-const ListingPage = ({ onOpenProperty, activeCategory, setActiveCategory, bookmarks, setBookmarks }) => {
+const ListingPage = ({ onOpenProperty, activeCategory, activeLocation, bookmarks, setBookmarks }) => {
   const [viewMode, setViewMode] = React.useState('grid');
   const [filterOpen, setFilterOpen] = React.useState(false);
-  const [filters, setFilters] = React.useState({ types: ['Villa'], bedrooms: 'Any', guests: 'Any', amenities: [] });
+  const cat = getCategory(activeCategory);
+  const defaultType = cat.id === 'all' ? 'Villa' : cat.label;
+  const [filters, setFilters] = React.useState({ types: [defaultType], bedrooms: 'Any', guests: 'Any', amenities: [] });
+
+  React.useEffect(() => {
+    const t = activeCategory === 'all' ? [] : [getCategory(activeCategory).label];
+    setFilters((prev) => ({ ...prev, types: t.length ? t : ['Villa', 'House', 'Hotel', 'Apartment', 'Camp House'] }));
+  }, [activeCategory, activeLocation]);
+
+  const filtered = filterProperties(PROPERTIES, activeCategory, activeLocation);
+  const title = getListingTitle(activeCategory, activeLocation);
+  const subtitle = getListingSubtitle(activeCategory, activeLocation, filtered.length);
 
   const toggleBookmark = (id) => {
     setBookmarks(prev => ({ ...prev, [id]: !prev[id] }));
@@ -303,10 +236,16 @@ const ListingPage = ({ onOpenProperty, activeCategory, setActiveCategory, bookma
         viewMode={viewMode}
         setViewMode={setViewMode}
         openFilters={() => setFilterOpen(true)}
-        count="649"
+        title={title}
+        subtitle={subtitle}
       />
       <section className={`prop-grid ${viewMode === 'list' ? 'is-list' : ''}`}>
-        {PROPERTIES.map(p => (
+        {filtered.length === 0 ? (
+          <div className="listing-empty">
+            <p>No stays match this category and location yet.</p>
+            <p className="muted">Try another area or browse all categories.</p>
+          </div>
+        ) : filtered.map(p => (
           <PropertyCard
             key={p.id}
             property={p}
@@ -317,7 +256,7 @@ const ListingPage = ({ onOpenProperty, activeCategory, setActiveCategory, bookma
           />
         ))}
       </section>
-      <div className="pagination">
+      {filtered.length > 0 && <div className="pagination">
         <button className="pg-btn" disabled>‹</button>
         <button className="pg-btn is-active">1</button>
         <button className="pg-btn">2</button>
@@ -325,7 +264,7 @@ const ListingPage = ({ onOpenProperty, activeCategory, setActiveCategory, bookma
         <span className="pg-dots">…</span>
         <button className="pg-btn">37</button>
         <button className="pg-btn">›</button>
-      </div>
+      </div>}
       <FilterDrawer open={filterOpen} onClose={() => setFilterOpen(false)} filters={filters} setFilters={setFilters} />
     </main>
   );
@@ -364,6 +303,15 @@ const ListingPage = ({ onOpenProperty, activeCategory, setActiveCategory, bookma
     font-size: 15px;
     margin: 8px 0 0;
   }
+  .listing-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px 24px;
+    background: var(--lav-bg);
+    border-radius: 24px;
+  }
+  .listing-empty p { margin: 0 0 8px; font-size: 18px; font-weight: 700; color: var(--navy); }
+  .listing-empty .muted { font-size: 15px; font-weight: 500; color: var(--muted); }
   .results-controls {
     display: flex; align-items: center; gap: 14px;
   }
