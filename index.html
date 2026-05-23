@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Jumeira — Luxury Villa Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy: #060627;
+    --navy-2: #07072B;
+    --pink: #F83F8F;
+    --coral: #FF5B6E;
+    --magenta: #EA3FA2;
+    --magenta-2: #D931B8;
+    --purple: #4F36E8;
+    --lav-bg: #F7F6FD;
+    --lav-soft: #F1EFFF;
+    --white: #FFFFFF;
+    --muted: #8A8BA3;
+    --border: #ECECF4;
+    --icon: #8E91A8;
+    --orange: #FF8A00;
+    --search-bg: #F6F5FA;
+    --highlight: #D9FF3F;
+    --shadow-card: 0 18px 45px rgba(12, 12, 40, 0.06);
+    --shadow-card-hover: 0 28px 60px rgba(12, 12, 40, 0.12);
+    --shadow-soft: 0 8px 20px rgba(6, 6, 39, 0.08);
+    --shadow-bookmark: 0 8px 20px rgba(6, 6, 39, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--navy);
+    background: #FFFFFF;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; padding: 0; color: inherit; }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--pink); color: white; }
+
+  /* Scrollbar polish */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #DCDCEA; border-radius: 10px; border: 2px solid transparent; background-clip: padding-box; }
+  ::-webkit-scrollbar-thumb:hover { background: #C5C5D8; background-clip: padding-box; border: 2px solid transparent; }
+
+  #root { min-height: 100vh; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<!-- Inline thumbnail for bundler -->
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#FF5B6E"/>
+        <stop offset="0.55" stop-color="#EA3FA2"/>
+        <stop offset="1" stop-color="#D931B8"/>
+      </linearGradient>
+    </defs>
+    <rect width="200" height="200" rx="36" fill="#F7F6FD"/>
+    <path d="M70 140 L100 60 L130 140 M82 115 L118 115" stroke="url(#g)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </svg>
+</template>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="src/icons.jsx"></script>
+<script type="text/babel" src="src/header.jsx"></script>
+<script type="text/babel" src="src/listing.jsx"></script>
+<script type="text/babel" src="src/detail.jsx"></script>
+<script type="text/babel" src="src/home.jsx"></script>
+<script type="text/babel" src="src/login.jsx"></script>
+<script type="text/babel" src="src/host.jsx"></script>
+<script type="text/babel" src="src/pages.jsx"></script>
+<script type="text/babel" src="src/checkout.jsx"></script>
+<script type="text/babel" src="src/account.jsx"></script>
+<script type="text/babel" src="src/hostflow.jsx"></script>
+<script type="text/babel" src="src/font-switcher.jsx"></script>
+<script type="text/babel" src="src/disclaimer.jsx"></script>
+<script type="text/babel" src="src/tour.jsx"></script>
+<script type="text/babel" src="src/tweaks-panel.jsx"></script>
+<script type="text/babel" src="src/app.jsx"></script>
+<script type="text/babel" src="src/responsive.jsx"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "jumeira",
+  "version": "0.4.0",
+  "private": true,
+  "description": "Jumeira — luxury villa marketplace prototype. Static HTML + React via Babel standalone.",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  }
+}
