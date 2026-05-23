@@ -44,8 +44,6 @@
     }
 
     .prop-grid:not(.is-list) { grid-template-columns: repeat(2, 1fr) !important; }
-    .listing-intro { grid-template-columns: 1fr; padding: 24px; gap: 24px; }
-    .listing-intro-gallery { grid-template-rows: 100px 100px; }
     .faq-grid { grid-template-columns: 1fr; }
     .editorial-grid { grid-template-columns: 1fr !important; }
     .dest-grid-expanded { grid-template-columns: repeat(2, 1fr) !important; }
@@ -392,14 +390,6 @@
     .results-controls { width: 100%; flex-wrap: wrap; }
     .filters-btn { flex: 1; min-width: 140px; height: 52px; width: auto; }
     .view-btn { width: 44px; height: 44px; }
-    .listing-intro { margin-top: 18px; padding: 20px 18px; gap: 20px; }
-    .intro-headline { font-size: 22px; }
-    .intro-body, .intro-cat-blurb { font-size: 14px; }
-    .listing-intro-gallery {
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 90px 90px;
-    }
-    .intro-img-1 { grid-row: span 2; }
     .listing-faq { margin-top: 40px; padding-top: 28px; }
     .listing-faq h2 { font-size: 22px; }
     .faq-card { padding: 18px; }

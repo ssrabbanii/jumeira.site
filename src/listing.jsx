@@ -63,33 +63,6 @@ const PropertyCard = ({ property, onOpen, bookmarked, onBookmarkToggle, viewMode
   );
 };
 
-const ListingIntro = ({ activeCategory, activeLocation, count }) => {
-  const loc = getLocation(activeLocation);
-  const guide = LOCATION_GUIDES[activeLocation] || LOCATION_GUIDES.jumeirah;
-  const catBlurbs = CATEGORY_BLURBS[activeCategory] || CATEGORY_BLURBS.all;
-  return (
-    <section className="listing-intro">
-      <div className="listing-intro-text">
-        <p className="intro-eyebrow">{loc.city} · {loc.area}</p>
-        <h2 className="intro-headline">{guide.headline}</h2>
-        <p className="intro-body">{guide.body}</p>
-        <p className="intro-cat-blurb">{catBlurbs}</p>
-        <div className="intro-highlights">
-          {guide.highlights.map((h) => (
-            <span key={h} className="intro-chip"><IconCheck size={14} stroke={2.2} /> {h}</span>
-          ))}
-        </div>
-        <p className="intro-count muted">Showing <strong>{count}</strong> curated stays in this search</p>
-      </div>
-      <div className="listing-intro-gallery">
-        {guide.gallery.map((src, i) => (
-          <img key={i} src={src} alt="" loading="lazy" onError={onImgError} className={`intro-img intro-img-${i + 1}`} />
-        ))}
-      </div>
-    </section>
-  );
-};
-
 const ListingFaq = () => (
   <section className="listing-faq">
     <h2>Good to know before you book</h2>
@@ -263,11 +236,6 @@ const ListingPage = ({ onOpenProperty, activeCategory, activeLocation, bookmarks
         title={title}
         subtitle={subtitle}
       />
-      <ListingIntro
-        activeCategory={activeCategory}
-        activeLocation={activeLocation}
-        count={filtered.length}
-      />
       <section className={`prop-grid ${viewMode === 'list' ? 'is-list' : ''}`}>
         {filtered.length === 0 ? (
           <div className="listing-empty">
@@ -342,82 +310,6 @@ const ListingPage = ({ onOpenProperty, activeCategory, activeLocation, bookmarks
   }
   .listing-empty p { margin: 0 0 8px; font-size: 18px; font-weight: 700; color: var(--navy); }
   .listing-empty .muted { font-size: 15px; font-weight: 500; color: var(--muted); }
-
-  .listing-intro {
-    display: grid;
-    grid-template-columns: 1.1fr 1fr;
-    gap: 36px;
-    margin-top: 28px;
-    padding: 32px;
-    background: linear-gradient(135deg, var(--lav-bg) 0%, #fff 55%);
-    border-radius: 24px;
-    border: 1px solid var(--border);
-  }
-  .intro-eyebrow {
-    font-size: 12px; font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--purple);
-    margin: 0 0 10px;
-  }
-  .intro-headline {
-    font-size: 26px; font-weight: 800;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-    margin: 0 0 14px;
-    color: var(--navy);
-    text-wrap: balance;
-  }
-  .intro-body, .intro-cat-blurb {
-    font-size: 15px;
-    line-height: 1.65;
-    color: var(--muted);
-    margin: 0 0 14px;
-    text-wrap: pretty;
-  }
-  .intro-cat-blurb {
-    padding: 14px 16px;
-    background: #fff;
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    color: var(--navy);
-    font-weight: 500;
-  }
-  .intro-highlights {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 16px 0 18px;
-  }
-  .intro-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    background: #fff;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--navy);
-    border: 1px solid var(--border);
-  }
-  .intro-chip svg { color: var(--purple); flex-shrink: 0; }
-  .intro-count { font-size: 14px; margin: 0; }
-  .intro-count strong { color: var(--navy); }
-  .listing-intro-gallery {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 120px 120px;
-    gap: 10px;
-    border-radius: 18px;
-    overflow: hidden;
-  }
-  .intro-img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  .intro-img-1 { grid-row: span 2; height: 100%; }
 
   .listing-faq {
     margin-top: 56px;
