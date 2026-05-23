@@ -44,6 +44,11 @@
     }
 
     .prop-grid:not(.is-list) { grid-template-columns: repeat(2, 1fr) !important; }
+    .listing-intro { grid-template-columns: 1fr; padding: 24px; gap: 24px; }
+    .listing-intro-gallery { grid-template-rows: 100px 100px; }
+    .faq-grid { grid-template-columns: 1fr; }
+    .editorial-grid { grid-template-columns: 1fr !important; }
+    .dest-grid-expanded { grid-template-columns: repeat(2, 1fr) !important; }
 
     /* Home */
     .hero { margin: 20px 24px 0; min-height: auto; }
@@ -52,7 +57,11 @@
     .hero-search { grid-template-columns: 1fr 1fr auto; gap: 6px; }
     .hero-search .hs-field:nth-child(3), .hero-search .hs-field:nth-child(4) { grid-column: span 1; }
     .cat-cards { grid-template-columns: repeat(3, 1fr); }
-    .dest-grid { grid-template-columns: repeat(3, 1fr); grid-template-rows: 200px 200px; }
+    .dest-grid, .dest-grid-expanded { grid-template-columns: repeat(3, 1fr); grid-template-rows: auto; }
+    .dest-grid-expanded .dest-card.is-tall { grid-row: span 1; height: 220px; }
+    .home-featured-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .editorial-grid { grid-template-columns: 1fr 1fr; }
+    .testimonial-grid { grid-template-columns: 1fr 1fr; }
     .dest-card.is-tall { grid-row: span 2; }
     .why-grid { grid-template-columns: repeat(2, 1fr); }
     .host-cta { grid-template-columns: 1fr; padding: 40px; margin-left: 24px; margin-right: 24px; }
@@ -380,9 +389,23 @@
     .results-header { flex-direction: column; align-items: flex-start; gap: 14px; }
     .results-title { font-size: 24px; }
     .results-sub { font-size: 13px; }
-    .results-controls { width: 100%; }
-    .filters-btn { flex: 1; height: 52px; width: auto; }
+    .results-controls { width: 100%; flex-wrap: wrap; }
+    .filters-btn { flex: 1; min-width: 140px; height: 52px; width: auto; }
     .view-btn { width: 44px; height: 44px; }
+    .listing-intro { margin-top: 18px; padding: 20px 18px; gap: 20px; }
+    .intro-headline { font-size: 22px; }
+    .intro-body, .intro-cat-blurb { font-size: 14px; }
+    .listing-intro-gallery {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 90px 90px;
+    }
+    .intro-img-1 { grid-row: span 2; }
+    .listing-faq { margin-top: 40px; padding-top: 28px; }
+    .listing-faq h2 { font-size: 22px; }
+    .faq-card { padding: 18px; }
+    .prop-card.is-list .prop-img-wrap { min-height: 200px; height: 200px; }
+    .prop-excerpt { font-size: 12px; }
+    .prop-amenity { font-size: 10px; padding: 3px 8px; }
 
     /* Hero */
     .hero { margin: 16px 16px 0; border-radius: 22px; }
@@ -401,11 +424,18 @@
     .home-sec h2 { font-size: 24px; }
     .sec-head { flex-direction: column; align-items: flex-start; gap: 8px; margin-bottom: 18px; }
     .cat-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .home-featured-grid { grid-template-columns: 1fr !important; gap: 16px; }
     .cat-card { padding: 16px; }
     .cat-card-icon { width: 40px; height: 40px; margin-bottom: 4px; }
     .dest-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+    .dest-grid-expanded { grid-template-columns: 1fr !important; }
     .dest-card { height: 180px; }
     .dest-card.is-tall { grid-row: auto; height: 240px; }
+    .dest-card .dest-desc { font-size: 12px; }
+    .editorial-card { flex-direction: column !important; }
+    .editorial-card img { width: 100% !important; height: 200px !important; }
+    .testimonial-grid { grid-template-columns: 1fr !important; }
+    .stats-bar { flex-direction: column; gap: 16px; text-align: center; }
     .why-grid { grid-template-columns: 1fr; gap: 12px; }
     .host-cta { padding: 32px 24px; margin: 40px 16px 0; }
     .host-cta h2 { font-size: 30px; }

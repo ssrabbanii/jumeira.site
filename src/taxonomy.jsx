@@ -35,10 +35,16 @@ const CITY_GROUPS = [
 const DEST_TO_LOC = {
   'Dubai City': 'jumeirah',
   'Palm Jumeirah': 'palm',
+  'Dubai Marina': 'marina',
   'Abu Dhabi': 'abudhabi',
   'Maldives': 'maldives',
   'Bali': 'jumeirah',
   'Santorini': 'marina',
+  'Mykonos': 'palm',
+  'Paris': 'downtown',
+  'London': 'jumeirah',
+  'Miami': 'palm',
+  'Tokyo': 'downtown',
 };
 
 const getCategory = (id) => CATEGORIES.find((c) => c.id === id) || CATEGORIES.find((c) => c.id === 'villa');

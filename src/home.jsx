@@ -1,21 +1,14 @@
 // Jumeira homepage
 
 const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }) => {
-  const destinations = [
-    { name: 'Dubai City', count: '649 stays', img: PHOTOS.villa1 },
-    { name: 'Palm Jumeirah', count: '212 stays', img: PHOTOS.villa3 },
-    { name: 'Abu Dhabi', count: '184 stays', img: PHOTOS.villa6 },
-    { name: 'Maldives', count: '96 stays', img: PHOTOS.villa7 },
-    { name: 'Bali', count: '420 stays', img: PHOTOS.villa5 },
-    { name: 'Santorini', count: '167 stays', img: PHOTOS.villa4 },
-  ];
+  const destinations = HOME_DESTINATIONS;
 
   const featuredCats = [
-    { id: 'villa', label: 'Villas', count: '2,140 homes', Icon: IconVilla },
-    { id: 'house', label: 'Houses', count: '1,820 homes', Icon: IconHouse },
-    { id: 'hotel', label: 'Hotels', count: '960 stays', Icon: IconHotel },
-    { id: 'apartment', label: 'Apartments', count: '3,210 stays', Icon: IconApartment },
-    { id: 'camp', label: 'Camp Houses', count: '320 unique', Icon: IconCamp },
+    { id: 'villa', label: 'Villas', count: '2,140 homes', desc: 'Private pools & gardens', Icon: IconVilla },
+    { id: 'house', label: 'Houses', count: '1,820 homes', desc: 'Room to spread out', Icon: IconHouse },
+    { id: 'hotel', label: 'Hotels', count: '960 stays', desc: 'Boutique & branded', Icon: IconHotel },
+    { id: 'apartment', label: 'Apartments', count: '3,210 stays', desc: 'Skyline & marina views', Icon: IconApartment },
+    { id: 'camp', label: 'Camp Houses', count: '320 unique', desc: 'Glamping & outdoor luxury', Icon: IconCamp },
   ];
 
   const toggleBookmark = (id) => setBookmarks(prev => ({ ...prev, [id]: !prev[id] }));
@@ -24,7 +17,7 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
     <main className="home">
       <section className="hero">
         <div className="hero-bg">
-          <img src={PHOTOS.villa3} alt="" />
+          <img src={PHOTO_POOL[2]} alt="" />
           <div className="hero-overlay" />
         </div>
         <div className="hero-inner">
@@ -32,7 +25,7 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
             <span className="dot" /> Curated stays · Premium hosts · 84 cities
           </div>
           <h1>Find your perfect <span className="grad-text">luxury stay</span>.</h1>
-          <p className="hero-sub">Explore premium villas, apartments, hotels, and private homes in the world's most desirable destinations.</p>
+          <p className="hero-sub">Explore 8,400+ premium villas, apartments, hotels, and private homes across 84 cities — every listing hand-vetted for design, comfort, and five-star service.</p>
 
           <div className="hero-search">
             <div className="hs-field">
@@ -58,7 +51,7 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
 
           <div className="hero-marquee">
             <span className="muted">Popular searches —</span>
-            {['Beachfront villas', 'Private pool', 'Architect homes', 'Family suites', 'City skyline apartments'].map(t => (
+            {['Beachfront villas', 'Private pool', 'Architect homes', 'Family suites', 'City skyline apartments', 'Desert camps', 'Overwater suites'].map(t => (
               <button key={t} className="marquee-chip" onClick={() => onBrowse('all', 'jumeirah')}>{t}</button>
             ))}
           </div>
@@ -78,6 +71,7 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
               <span className="cat-card-icon"><c.Icon size={26} stroke={1.7} /></span>
               <strong>{c.label}</strong>
               <span className="muted">{c.count}</span>
+              <span className="cat-card-desc">{c.desc}</span>
             </button>
           ))}
         </div>
@@ -91,13 +85,14 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
           </div>
           <button className="link-arrow" onClick={() => onBrowse('all', 'jumeirah')}>See all <IconArrowRight size={16} stroke={2} /></button>
         </div>
-        <div className="dest-grid">
+        <div className="dest-grid dest-grid-expanded">
           {destinations.map((d, i) => (
             <button key={d.name} className={`dest-card ${i === 0 ? 'is-tall' : ''}`} onClick={() => onBrowse('all', DEST_TO_LOC[d.name] || 'jumeirah')}>
               <img src={d.img} alt={d.name} loading="lazy" />
               <div className="dest-info">
                 <strong>{d.name}</strong>
                 <span>{d.count}</span>
+                {d.desc && <span className="dest-desc">{d.desc}</span>}
               </div>
             </button>
           ))}
@@ -107,13 +102,44 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
       <section className="home-sec">
         <div className="sec-head">
           <div>
+            <h2>Editorial collections</h2>
+            <p className="muted">Curated stories and stay lists from the Jumeira team.</p>
+          </div>
+        </div>
+        <div className="editorial-grid">
+          {HOME_EDITORIAL.map((e) => (
+            <button key={e.title} className="editorial-card" onClick={() => onBrowse(e.cat, e.loc)}>
+              <img src={e.img} alt="" loading="lazy" />
+              <div className="editorial-body">
+                <span className="editorial-tag">{e.tag}</span>
+                <h3>{e.title}</h3>
+                <p>{e.body}</p>
+                <span className="link-arrow">Explore collection <IconArrowRight size={16} stroke={2} /></span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="home-sec stats-sec">
+        <div className="stats-bar">
+          <div><strong>8,400+</strong><span>Luxury stays</span></div>
+          <div><strong>84</strong><span>Global cities</span></div>
+          <div><strong>4.9</strong><span>Average guest rating</span></div>
+          <div><strong>24/7</strong><span>Concierge support</span></div>
+        </div>
+      </section>
+
+      <section className="home-sec">
+        <div className="sec-head">
+          <div>
             <h2>Featured luxury stays</h2>
-            <p className="muted">Hand-picked by our editors.</p>
+            <p className="muted">Hand-picked by our editors — updated weekly.</p>
           </div>
           <button className="link-arrow" onClick={() => onBrowse('villa', 'jumeirah')}>See all <IconArrowRight size={16} stroke={2} /></button>
         </div>
-        <div className="prop-grid">
-          {PROPERTIES.slice(0, 3).map(p => (
+        <div className="prop-grid home-featured-grid">
+          {PROPERTIES.slice(0, 6).map(p => (
             <PropertyCard
               key={p.id}
               property={p}
@@ -126,14 +152,35 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
         </div>
       </section>
 
+      <section className="home-sec">
+        <div className="sec-head">
+          <div>
+            <h2>What guests are saying</h2>
+            <p className="muted">Real trips, real reviews from verified stays.</p>
+          </div>
+        </div>
+        <div className="testimonial-grid">
+          {HOME_TESTIMONIALS.map((t) => (
+            <blockquote key={t.name} className="testimonial-card">
+              <p className="testimonial-quote">"{t.quote}"</p>
+              <footer>
+                <strong>{t.name}</strong>
+                <span>{t.trip}</span>
+              </footer>
+            </blockquote>
+          ))}
+        </div>
+      </section>
+
       <section className="home-sec why">
         <h2>Why book with Jumeira</h2>
+        <p className="why-lead muted">We are not a generic rental site — every home passes a 120-point design and service review before it goes live.</p>
         <div className="why-grid">
           {[
-            { title: 'Curated luxury', body: 'Every home is hand-vetted for architecture, comfort, and service.', icon: IconCheck },
-            { title: 'Verified hosts', body: 'Background-checked, top-rated hosts you can actually trust.', icon: IconHeart },
-            { title: 'Flexible booking', body: 'Free cancellation on most stays up to 48 hours before check-in.', icon: IconCalendar },
-            { title: '24 / 7 concierge', body: 'Dedicated guest team on call from the moment you book.', icon: IconUsers },
+            { title: 'Curated luxury', body: 'Every home is hand-vetted for architecture, comfort, and service. We visit properties, review photos, and reject 7 in 10 applications.', icon: IconCheck },
+            { title: 'Verified hosts', body: 'Background-checked, top-rated hosts you can trust — with response-time guarantees and on-call support during your stay.', icon: IconHeart },
+            { title: 'Flexible booking', body: 'Free cancellation on most stays up to 48 hours before check-in. Change dates when plans shift, subject to host approval.', icon: IconCalendar },
+            { title: '24 / 7 concierge', body: 'Dedicated guest team on call from booking through checkout — airport transfers, chefs, babysitters, and last-minute requests.', icon: IconUsers },
           ].map((f, i) => (
             <div className="why-card" key={i}>
               <span className="why-icon"><f.icon size={22} stroke={1.8} /></span>
@@ -152,7 +199,7 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
           <button className="cta-pill" onClick={() => setView('host')}>Become a host <IconArrowRight size={16} stroke={2} /></button>
         </div>
         <div className="host-cta-art">
-          <img src={PHOTOS.villa1} alt="" />
+          <img src={PHOTO_POOL[0]} alt="" />
         </div>
       </section>
     </main>
@@ -317,12 +364,26 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
   }
   .cat-card strong { font-size: 16px; }
   .cat-card .muted { font-size: 13px; }
+  .cat-card-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-top: 2px;
+  }
 
   .dest-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: 200px 200px;
     gap: 16px;
+  }
+  .dest-grid-expanded {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 180px);
+  }
+  .dest-grid-expanded .dest-card.is-tall {
+    grid-row: span 2;
+    grid-column: span 1;
   }
   .dest-card {
     position: relative;
@@ -341,10 +402,128 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
   }
   .dest-info { position: absolute; left: 22px; bottom: 22px; color: #fff; z-index: 1; }
   .dest-info strong { display: block; font-size: 22px; font-weight: 800; letter-spacing: -0.01em; }
-  .dest-info span { font-size: 13px; opacity: 0.88; }
+  .dest-info span { font-size: 13px; opacity: 0.88; display: block; }
+  .dest-desc {
+    display: block;
+    font-size: 12px;
+    opacity: 0.75;
+    margin-top: 4px;
+    max-width: 220px;
+    line-height: 1.35;
+  }
   .dest-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-card-hover); }
   .dest-card:hover img { transform: scale(1.05); }
 
+  .editorial-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .editorial-card {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    background: #fff;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .editorial-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); }
+  .editorial-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+  }
+  .editorial-body { padding: 22px 24px 26px; }
+  .editorial-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--purple);
+  }
+  .editorial-body h3 {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 8px 0 10px;
+    line-height: 1.25;
+    color: var(--navy);
+  }
+  .editorial-body p {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--muted);
+    margin: 0 0 14px;
+  }
+  .editorial-body .link-arrow { padding: 0; font-size: 13px; }
+
+  .stats-sec { padding-top: 48px !important; }
+  .stats-bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 32px 40px;
+    background: linear-gradient(135deg, #07072B 0%, #1A1454 70%);
+    border-radius: 24px;
+    color: #fff;
+  }
+  .stats-bar strong {
+    display: block;
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .stats-bar span {
+    display: block;
+    font-size: 14px;
+    opacity: 0.75;
+    margin-top: 6px;
+  }
+  .home-featured-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .testimonial-card {
+    margin: 0;
+    padding: 24px;
+    background: #fff;
+    border-radius: 22px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+  }
+  .testimonial-quote {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--navy);
+    margin: 0 0 18px;
+    text-wrap: pretty;
+  }
+  .testimonial-card footer strong {
+    display: block;
+    font-size: 14px;
+  }
+  .testimonial-card footer span {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    display: block;
+  }
+
+  .why-lead {
+    max-width: 640px;
+    font-size: 16px;
+    line-height: 1.55;
+    margin: -4px 0 28px;
+  }
   .why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
   .why-card {
     background: #fff;
@@ -361,7 +540,7 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
     margin-bottom: 16px;
   }
   .why-card strong { font-size: 17px; display: block; margin-bottom: 6px; }
-  .why-card p { color: var(--muted); font-size: 14px; line-height: 1.5; margin: 0; text-wrap: pretty; }
+  .why-card p { color: var(--muted); font-size: 14px; line-height: 1.55; margin: 0; text-wrap: pretty; }
 
   .host-cta {
     display: grid; grid-template-columns: 1fr 1fr; gap: 40px;

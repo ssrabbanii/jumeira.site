@@ -1,32 +1,5 @@
 // Jumeira listing page — results header + property card grid
-
-// Photo set — luxury villas / Mediterranean / Middle-Eastern courtyards.
-// Use sturdy, reliable Unsplash photo URLs.
-const PHOTOS = {
-  villa1: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=900&q=80&auto=format&fit=crop',
-  villa2: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80&auto=format&fit=crop',
-  villa3: 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=900&q=80&auto=format&fit=crop',
-  villa4: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=900&q=80&auto=format&fit=crop',
-  villa5: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=900&q=80&auto=format&fit=crop',
-  villa6: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80&auto=format&fit=crop',
-  villa7: 'https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?w=900&q=80&auto=format&fit=crop',
-  villa8: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=900&q=80&auto=format&fit=crop',
-};
-
-const PROPERTIES = [
-  { id: 1, img: PHOTOS.villa3, category: 'villa', locationId: 'palm', label: 'VILLA', title: 'Five Palm Jumeirah Beachfront Villa — Pool, Jacuzzi', meta: '8 guests · 4 bedrooms', priceFrom: '1.920', rating: 4.6, bookmarked: true },
-  { id: 2, img: PHOTOS.villa2, category: 'house', locationId: 'jumeirah', label: 'HOUSE', title: 'Two Bedroom Arabian Summerhouse Family Suite', meta: '6 guests · 3 bedrooms', priceFrom: '890', rating: 3.2, bookmarked: false },
-  { id: 3, img: PHOTOS.villa7, category: 'hotel', locationId: 'palm', label: 'HOTEL', title: 'Beach Front Suite in Five Palm Jumeirah Hotel', meta: '6 guests · 2 bedrooms', priceFrom: '750', rating: 5.0, bookmarked: false },
-  { id: 4, img: PHOTOS.villa4, category: 'villa', locationId: 'jumeirah', label: 'VILLA', title: 'Arabian Summerhouse Superior', meta: '8 guests · 3 bedrooms', priceFrom: '1.299', rating: 3.8, bookmarked: false },
-  { id: 5, img: PHOTOS.villa5, category: 'apartment', locationId: 'downtown', label: 'APARTMENT', title: 'Stylish Luxury Downtown Apartment with Skyline View', meta: '4 guests · 2 bedrooms', priceFrom: '1.000', rating: 4.9, bookmarked: false },
-  { id: 6, img: PHOTOS.villa6, category: 'villa', locationId: 'marina', label: 'VILLA', title: 'Spacious Garden Villa near the Marina', meta: '6 guests · 3 bedrooms', priceFrom: '1.450', rating: 3.6, bookmarked: false },
-  { id: 7, img: PHOTOS.villa8, category: 'camp', locationId: 'maldives', label: 'CAMP HOUSE', title: 'Palm-Lined Beach Camp with Private Plunge Pool', meta: '5 guests · 2 bedrooms', priceFrom: '1.180', rating: 4.7, bookmarked: false },
-  { id: 8, img: PHOTOS.villa1, category: 'villa', locationId: 'jumeirah', label: 'VILLA', title: 'Architect-Designed Coastal Pavilion Villa', meta: '10 guests · 5 bedrooms', priceFrom: '2.450', rating: 4.8, bookmarked: false },
-  { id: 9, img: PHOTOS.villa6, category: 'house', locationId: 'marina', label: 'HOUSE', title: 'Terraced Marina Townhouse with Skyline View', meta: '6 guests · 3 bedrooms', priceFrom: '1.650', rating: 4.4, bookmarked: false },
-  { id: 10, img: PHOTOS.villa2, category: 'hotel', locationId: 'downtown', label: 'HOTEL', title: 'Boutique Downtown Hotel Suite — Burj Khalifa View', meta: '2 guests · 1 bedroom', priceFrom: '520', rating: 4.5, bookmarked: false },
-  { id: 11, img: PHOTOS.villa5, category: 'apartment', locationId: 'marina', label: 'APARTMENT', title: 'Marina Walk Penthouse with Private Terrace', meta: '6 guests · 3 bedrooms', priceFrom: '1.320', rating: 4.6, bookmarked: false },
-  { id: 12, img: PHOTOS.villa4, category: 'camp', locationId: 'abudhabi', label: 'CAMP HOUSE', title: 'Desert Glamping Pavilion on Saadiyat Island', meta: '4 guests · 2 bedrooms', priceFrom: '680', rating: 4.3, bookmarked: false },
-];
+// PROPERTIES, PHOTOS loaded from mock-data.jsx
 
 const Stars = ({ rating, size = 17 }) => {
   const full = Math.floor(rating);
@@ -52,6 +25,7 @@ const PropertyCard = ({ property, onOpen, bookmarked, onBookmarkToggle, viewMode
     >
       <div className="prop-img-wrap">
         <img src={property.img} alt={property.title} loading="lazy" />
+        {property.badge && <span className="prop-badge">{property.badge}</span>}
         <button
           className={`bookmark-btn ${bookmarked ? 'is-active' : ''}`}
           onClick={(e) => { e.stopPropagation(); onBookmarkToggle(property.id); }}
@@ -61,9 +35,18 @@ const PropertyCard = ({ property, onOpen, bookmarked, onBookmarkToggle, viewMode
         </button>
       </div>
       <div className="prop-body">
-        <div className="prop-label">{property.label}</div>
+        <div className="prop-label-row">
+          <span className="prop-label">{property.label}</span>
+          {property.reviews && <span className="prop-reviews">{property.reviews} reviews</span>}
+        </div>
         <h3 className="prop-title">{property.title}</h3>
         <div className="prop-meta">{property.meta}</div>
+        {property.excerpt && <p className="prop-excerpt">{property.excerpt}</p>}
+        {property.amenities && (
+          <div className="prop-amenities">
+            {property.amenities.map((a) => <span key={a} className="prop-amenity">{a}</span>)}
+          </div>
+        )}
         <div className="prop-row">
           <div className="prop-price">
             <span className="from">From</span>
@@ -80,9 +63,50 @@ const PropertyCard = ({ property, onOpen, bookmarked, onBookmarkToggle, viewMode
   );
 };
 
+const ListingIntro = ({ activeCategory, activeLocation, count }) => {
+  const loc = getLocation(activeLocation);
+  const guide = LOCATION_GUIDES[activeLocation] || LOCATION_GUIDES.jumeirah;
+  const catBlurbs = CATEGORY_BLURBS[activeCategory] || CATEGORY_BLURBS.all;
+  return (
+    <section className="listing-intro">
+      <div className="listing-intro-text">
+        <p className="intro-eyebrow">{loc.city} · {loc.area}</p>
+        <h2 className="intro-headline">{guide.headline}</h2>
+        <p className="intro-body">{guide.body}</p>
+        <p className="intro-cat-blurb">{catBlurbs}</p>
+        <div className="intro-highlights">
+          {guide.highlights.map((h) => (
+            <span key={h} className="intro-chip"><IconCheck size={14} stroke={2.2} /> {h}</span>
+          ))}
+        </div>
+        <p className="intro-count muted">Showing <strong>{count}</strong> curated stays in this search</p>
+      </div>
+      <div className="listing-intro-gallery">
+        {guide.gallery.map((src, i) => (
+          <img key={i} src={src} alt="" loading="lazy" className={`intro-img intro-img-${i + 1}`} />
+        ))}
+      </div>
+    </section>
+  );
+};
+
+const ListingFaq = () => (
+  <section className="listing-faq">
+    <h2>Good to know before you book</h2>
+    <div className="faq-grid">
+      {LISTING_FAQ.map((item) => (
+        <article key={item.q} className="faq-card">
+          <h3>{item.q}</h3>
+          <p>{item.a}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+);
+
 const ResultsHeader = ({ viewMode, setViewMode, openFilters, title, subtitle }) => (
   <div className="results-header">
-    <div>
+    <div className="results-head-text">
       <h1 className="results-title"><span className="dash">—</span> {title}</h1>
       <p className="results-sub">{subtitle}</p>
     </div>
@@ -239,6 +263,11 @@ const ListingPage = ({ onOpenProperty, activeCategory, activeLocation, bookmarks
         title={title}
         subtitle={subtitle}
       />
+      <ListingIntro
+        activeCategory={activeCategory}
+        activeLocation={activeLocation}
+        count={filtered.length}
+      />
       <section className={`prop-grid ${viewMode === 'list' ? 'is-list' : ''}`}>
         {filtered.length === 0 ? (
           <div className="listing-empty">
@@ -265,6 +294,7 @@ const ListingPage = ({ onOpenProperty, activeCategory, activeLocation, bookmarks
         <button className="pg-btn">37</button>
         <button className="pg-btn">›</button>
       </div>}
+      <ListingFaq />
       <FilterDrawer open={filterOpen} onClose={() => setFilterOpen(false)} filters={filters} setFilters={setFilters} />
     </main>
   );
@@ -312,6 +342,168 @@ const ListingPage = ({ onOpenProperty, activeCategory, activeLocation, bookmarks
   }
   .listing-empty p { margin: 0 0 8px; font-size: 18px; font-weight: 700; color: var(--navy); }
   .listing-empty .muted { font-size: 15px; font-weight: 500; color: var(--muted); }
+
+  .listing-intro {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 36px;
+    margin-top: 28px;
+    padding: 32px;
+    background: linear-gradient(135deg, var(--lav-bg) 0%, #fff 55%);
+    border-radius: 24px;
+    border: 1px solid var(--border);
+  }
+  .intro-eyebrow {
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin: 0 0 10px;
+  }
+  .intro-headline {
+    font-size: 26px; font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0 0 14px;
+    color: var(--navy);
+    text-wrap: balance;
+  }
+  .intro-body, .intro-cat-blurb {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--muted);
+    margin: 0 0 14px;
+    text-wrap: pretty;
+  }
+  .intro-cat-blurb {
+    padding: 14px 16px;
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    color: var(--navy);
+    font-weight: 500;
+  }
+  .intro-highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0 18px;
+  }
+  .intro-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #fff;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    border: 1px solid var(--border);
+  }
+  .intro-chip svg { color: var(--purple); flex-shrink: 0; }
+  .intro-count { font-size: 14px; margin: 0; }
+  .intro-count strong { color: var(--navy); }
+  .listing-intro-gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 120px 120px;
+    gap: 10px;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+  .intro-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .intro-img-1 { grid-row: span 2; height: 100%; }
+
+  .listing-faq {
+    margin-top: 56px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+  .listing-faq h2 {
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0 0 24px;
+    letter-spacing: -0.02em;
+  }
+  .faq-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .faq-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 22px 24px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+  }
+  .faq-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 10px;
+    color: var(--navy);
+    line-height: 1.35;
+  }
+  .faq-card p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .prop-badge {
+    position: absolute;
+    left: 14px; top: 14px;
+    padding: 6px 12px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--navy);
+    box-shadow: var(--shadow-soft);
+  }
+  .prop-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .prop-reviews { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .prop-excerpt {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--muted);
+    margin: 8px 0 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .prop-amenities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .prop-amenity {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    background: var(--lav-bg);
+    color: var(--navy);
+    border-radius: 999px;
+  }
+  .prop-card.is-list .prop-excerpt {
+    -webkit-line-clamp: 3;
+    margin-top: 10px;
+  }
+  .prop-card.is-list .prop-amenities { margin-top: 12px; }
+
   .results-controls {
     display: flex; align-items: center; gap: 14px;
   }
@@ -449,8 +641,8 @@ const ListingPage = ({ onOpenProperty, activeCategory, activeLocation, bookmarks
   }
 
   /* List view variant */
-  .prop-card.is-list { display: grid; grid-template-columns: 340px 1fr; }
-  .prop-card.is-list .prop-img-wrap { height: 220px; }
+  .prop-card.is-list { display: grid; grid-template-columns: minmax(200px, 340px) 1fr; }
+  .prop-card.is-list .prop-img-wrap { height: 100%; min-height: 220px; }
   .prop-card.is-list .prop-body { padding: 22px 28px; display: flex; flex-direction: column; justify-content: center; }
 
   /* Pagination */
