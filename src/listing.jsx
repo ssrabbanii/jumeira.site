@@ -207,7 +207,15 @@ const FilterDrawer = ({ open, onClose, filters, setFilters }) => {
   );
 };
 
-const ListingPage = ({ onOpenProperty, activeCategory, activeLocation, bookmarks, setBookmarks }) => {
+const matchesListingQuery = (property, query) => {
+  if (!query) return true;
+  const q = query.toLowerCase();
+  const loc = getLocation(property.locationId);
+  const hay = `${property.title} ${property.excerpt || ''} ${property.meta} ${property.label} ${loc.area} ${loc.city}`.toLowerCase();
+  return hay.includes(q);
+};
+
+const ListingPage = ({ onOpenProperty, activeCategory, activeLocation, listingQuery, bookmarks, setBookmarks }) => {
   const [viewMode, setViewMode] = React.useState('grid');
   const [filterOpen, setFilterOpen] = React.useState(false);
   const cat = getCategory(activeCategory);
@@ -219,7 +227,8 @@ const ListingPage = ({ onOpenProperty, activeCategory, activeLocation, bookmarks
     setFilters((prev) => ({ ...prev, types: t.length ? t : ['Villa', 'House', 'Hotel', 'Apartment', 'Camp House'] }));
   }, [activeCategory, activeLocation]);
 
-  const filtered = filterProperties(PROPERTIES, activeCategory, activeLocation);
+  const filtered = filterProperties(PROPERTIES, activeCategory, activeLocation)
+    .filter((p) => matchesListingQuery(p, listingQuery));
   const title = getListingTitle(activeCategory, activeLocation);
   const subtitle = getListingSubtitle(activeCategory, activeLocation, filtered.length);
 

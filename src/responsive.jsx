@@ -23,7 +23,8 @@
   /* ───────── TABLET (≤1100px) ───────── */
   @media (max-width: 1100px) {
     .top-nav-inner { gap: 16px; padding: 0 24px; height: 84px; }
-    .search-bar { flex: 0 1 280px; height: 48px; }
+    .nav-search-slot { flex: 0 1 280px; }
+    .nav-search-slot .search-bar { height: 48px; }
     .nav-links { gap: 18px; }
     .nav-link { font-size: 13px; }
     .currency span { display: none; }
@@ -151,23 +152,29 @@
       animation: msoIn .15s ease;
     }
     @keyframes msoIn { from { opacity: 0; } to { opacity: 1; } }
+    .mobile-search-overlay {
+      display: flex; flex-direction: column;
+    }
     .mobile-search-bar {
-      display: flex; align-items: center; gap: 10px;
+      display: flex; align-items: flex-start; gap: 10px;
       padding: 14px 16px;
       border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
     }
-    .mobile-search-bar input {
+    .mobile-search-bar .search-wrap {
       flex: 1; min-width: 0;
-      border: none; outline: none;
-      background: none;
-      font-family: inherit;
-      font-size: 16px;
-      color: var(--navy);
+    }
+    .mobile-search-bar .search-suggest {
+      position: fixed;
+      left: 16px; right: 16px;
+      top: 72px;
+      max-height: calc(100vh - 100px);
     }
     .mobile-search-bar > button {
       font-size: 14px; font-weight: 700;
       color: var(--pink);
-      padding: 6px 4px;
+      padding: 12px 4px;
+      flex-shrink: 0;
     }
 
     /* Mobile drawer */
@@ -403,11 +410,20 @@
     .hero h1 { font-size: 34px; margin: 12px 0 10px; line-height: 1.1; }
     .hero-sub { font-size: 14px; }
     .hero-eyebrow { font-size: 11px; padding: 6px 12px; }
-    .hero-search { display: flex; flex-direction: column; gap: 4px; padding: 8px; border-radius: 16px; margin-top: 18px; }
+    .hero-search-form { margin-top: 18px; }
+    .hero-search { display: flex; flex-direction: column; gap: 4px; padding: 8px; border-radius: 16px; }
     .hero-search .hs-field { padding: 10px 14px; }
-    .hs-cta { width: 100%; padding: 14px; justify-content: center; margin-top: 4px; }
-    .hero-marquee { font-size: 12px; }
-    .marquee-chip { padding: 6px 12px; font-size: 12px; }
+    .hero-search .hs-panel {
+      position: fixed;
+      left: 16px; right: 16px;
+      top: auto;
+      bottom: 16px;
+      max-height: 50vh;
+      z-index: 80;
+    }
+    .hero-search .hs-cta { width: 100%; padding: 14px; justify-content: center; margin-top: 4px; }
+    .hero-search-form .hero-marquee { font-size: 12px; }
+    .hero-search-form .marquee-chip { padding: 6px 12px; font-size: 12px; }
 
     /* Home sections */
     .home-sec { padding: 40px 16px 0; }

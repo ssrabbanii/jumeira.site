@@ -93,10 +93,12 @@ const parseListingPath = (pathname) => {
     return { view: 'listing', categoryId: 'villa', locationId: 'jumeirah' };
   }
   if (pathname === '/home') return { view: 'home' };
+  if (pathname === '/buy') return { view: 'buy' };
+  if (pathname === '/rent') return { view: 'rent' };
+  if (pathname === '/contact') return { view: 'contact' };
   if (pathname === '/login') return { view: 'login' };
   if (pathname === '/host') return { view: 'host' };
   if (pathname === '/account') return { view: 'account' };
-  if (pathname === '/contact') return { view: 'contact' };
 
   return null;
 };

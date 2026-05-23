@@ -58,7 +58,7 @@ const Footer = ({ setView }) => (
           <a>Help center</a>
           <a>Trust & safety</a>
           <a>Cancellation</a>
-          <a>Contact</a>
+          <a onClick={() => setView('contact')}>Contact</a>
         </div>
       </div>
     </div>
@@ -83,6 +83,7 @@ const App = () => {
   const initialRoute = readRouteFromUrl();
   const [view, setView] = React.useState(initialRoute.view || 'listing');
   const [searchValue, setSearchValue] = React.useState('');
+  const [listingQuery, setListingQuery] = React.useState('');
   const [activeCategory, setActiveCategory] = React.useState(initialRoute.categoryId || 'villa');
   const [activeLocation, setActiveLocation] = React.useState(initialRoute.locationId || 'jumeirah');
   const [bookmarks, setBookmarks] = React.useState({ 1: true });
@@ -98,11 +99,12 @@ const App = () => {
     }
   }, []);
 
-  const browseListing = React.useCallback((categoryId, locationId) => {
+  const browseListing = React.useCallback((categoryId, locationId, query = '') => {
     const cat = categoryId || activeCategory;
     const loc = locationId || activeLocation;
     setActiveCategory(cat);
     setActiveLocation(loc);
+    setListingQuery(query || '');
     setView('listing');
     syncListingUrl(cat, loc);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -148,7 +150,16 @@ const App = () => {
 
   const goView = (v) => {
     setView(v);
-    if (v === 'home') window.history.pushState({ view: 'home' }, '', '/home');
+    const staticPaths = {
+      home: '/home',
+      buy: '/buy',
+      rent: '/rent',
+      contact: '/contact',
+      login: '/login',
+      host: '/host',
+      account: '/account',
+    };
+    if (staticPaths[v]) window.history.pushState({ view: v }, '', staticPaths[v]);
     else if (v === 'listing') syncListingUrl(activeCategory, activeLocation);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -159,6 +170,21 @@ const App = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleSearchSelect = (item) => {
+    if (item.type === 'property' && item.property) {
+      setSearchValue(item.label);
+      openProperty(item.property);
+      return;
+    }
+    if (item.view) {
+      setSearchValue(item.label);
+      goView(item.view);
+      return;
+    }
+    setSearchValue(item.label);
+    browseListing(item.categoryId || 'all', item.locationId || 'jumeirah', item.query || '');
+  };
+
   return (
     <div className={`app density-${t.density} ${t.showLabels ? '' : 'hide-labels'}`} data-screen-label={`Jumeira · ${view}`}>
       <TopNav
@@ -166,6 +192,7 @@ const App = () => {
         setView={goView}
         searchValue={searchValue}
         setSearchValue={setSearchValue}
+        onSearchSelect={handleSearchSelect}
         isLoggedIn={isLoggedIn}
         onLogout={() => { setIsLoggedIn(false); goView('home'); }}
         onAccountTab={goAccountTab}
@@ -184,6 +211,7 @@ const App = () => {
           onOpenProperty={openProperty}
           activeCategory={activeCategory}
           activeLocation={activeLocation}
+          listingQuery={listingQuery}
           bookmarks={bookmarks}
           setBookmarks={setBookmarks}
         />
@@ -227,14 +255,25 @@ const App = () => {
           onOpenProperty={openProperty}
         />
       )}
-      {view === 'contact' && (
-        <main className="placeholder-page">
-          <div className="placeholder-card">
-            <h1>Contact us</h1>
-            <p>This page is intentionally minimal for the prototype. <button className="text-link" onClick={() => goView('listing')}>Back to listings →</button></p>
-          </div>
-        </main>
+      {view === 'buy' && (
+        <BuyPage
+          setView={goView}
+          onBrowse={browseListing}
+          onOpenProperty={openProperty}
+          bookmarks={bookmarks}
+          setBookmarks={setBookmarks}
+        />
       )}
+      {view === 'rent' && (
+        <RentPage
+          setView={goView}
+          onBrowse={browseListing}
+          onOpenProperty={openProperty}
+          bookmarks={bookmarks}
+          setBookmarks={setBookmarks}
+        />
+      )}
+      {view === 'contact' && <ContactPage setView={goView} />}
 
       <Footer setView={goView} />
       <FontSwitcher />

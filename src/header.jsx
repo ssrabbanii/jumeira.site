@@ -54,7 +54,7 @@ const FlagUS = ({ size = 28 }) => (
   </svg>
 );
 
-const TopNav = ({ view, setView, searchValue, setSearchValue, isLoggedIn, onLogout, onAccountTab }) => {
+const TopNav = ({ view, setView, searchValue, setSearchValue, onSearchSelect, isLoggedIn, onLogout, onAccountTab }) => {
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = React.useState(false);
@@ -83,7 +83,7 @@ const TopNav = ({ view, setView, searchValue, setSearchValue, isLoggedIn, onLogo
   ];
 
   const isNavActive = (id) => {
-    if (id === 'buy') return ['buy', 'listing', 'detail', 'checkout'].includes(view);
+    if (id === 'buy') return view === 'buy';
     if (id === 'sell') return ['host', 'host-dash', 'list'].includes(view);
     if (id === 'rent') return view === 'rent';
     if (id === 'contact') return view === 'contact';
@@ -111,13 +111,13 @@ const TopNav = ({ view, setView, searchValue, setSearchValue, isLoggedIn, onLogo
           <IconChevron size={14} stroke={2} />
         </button>
 
-        <div className="search-bar desktop-only">
-          <IconSearch size={20} stroke={1.8} />
-          <input
-            type="text"
+        <div className="nav-search-slot desktop-only">
+          <SearchBar
+            variant="nav"
             placeholder="Search villas, locations, hosts…"
             value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
+            onChange={setSearchValue}
+            onSelect={onSearchSelect}
           />
         </div>
 
@@ -191,15 +191,17 @@ const TopNav = ({ view, setView, searchValue, setSearchValue, isLoggedIn, onLogo
       {mobileSearchOpen && (
         <div className="mobile-search-overlay">
           <div className="mobile-search-bar">
-            <IconSearch size={20} stroke={1.8} />
-            <input
-              type="text"
-              autoFocus
-              placeholder="Search villas, locations, hosts…"
+            <SearchBar
+              variant="mobile"
+              placeholder="Search villas, locations…"
               value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
+              onChange={setSearchValue}
+              onSelect={(item) => {
+                onSearchSelect && onSearchSelect(item);
+                setMobileSearchOpen(false);
+              }}
             />
-            <button onClick={() => setMobileSearchOpen(false)}>Cancel</button>
+            <button type="button" onClick={() => setMobileSearchOpen(false)}>Cancel</button>
           </div>
         </div>
       )}
@@ -553,30 +555,7 @@ const CategoryNav = ({ activeCategory, activeLocation, onSelectCategory, onSelec
     color: var(--navy);
     padding: 6px 4px;
   }
-  .search-bar {
-    flex: 0 0 420px;
-    height: 56px;
-    background: var(--search-bg);
-    border-radius: 16px;
-    display: flex; align-items: center;
-    padding: 0 20px;
-    gap: 12px;
-    color: var(--icon);
-    transition: background .2s ease, box-shadow .2s ease;
-  }
-  .search-bar:focus-within {
-    background: #fff;
-    box-shadow: 0 0 0 2px rgba(79, 54, 232, 0.18), 0 8px 22px rgba(79, 54, 232, 0.08);
-  }
-  .search-bar input {
-    border: none; background: transparent;
-    width: 100%;
-    font-size: 15px;
-    font-family: inherit;
-    color: var(--navy);
-    outline: none;
-  }
-  .search-bar input::placeholder { color: var(--muted); }
+  .nav-search-slot { flex: 0 0 420px; min-width: 0; display: flex; }
   .nav-links {
     display: flex; align-items: center; gap: 28px;
     margin-left: auto;

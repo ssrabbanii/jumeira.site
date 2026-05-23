@@ -27,34 +27,10 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
           <h1>Find your perfect <span className="grad-text">luxury stay</span>.</h1>
           <p className="hero-sub">Explore 8,400+ premium villas, apartments, hotels, and private homes across 84 cities — every listing hand-vetted for design, comfort, and five-star service.</p>
 
-          <div className="hero-search">
-            <div className="hs-field">
-              <span>Location</span>
-              <div className="hs-val"><IconMapPin size={16} stroke={1.8} /> Dubai City</div>
-            </div>
-            <div className="hs-field">
-              <span>Property</span>
-              <div className="hs-val"><IconVilla size={16} stroke={1.8} /> Villa</div>
-            </div>
-            <div className="hs-field">
-              <span>Dates</span>
-              <div className="hs-val"><IconCalendar size={16} stroke={1.8} /> Jun 12 — Jun 17</div>
-            </div>
-            <div className="hs-field">
-              <span>Guests</span>
-              <div className="hs-val"><IconUsers size={16} stroke={1.8} /> 4 guests</div>
-            </div>
-            <button className="hs-cta" onClick={() => onBrowse('villa', 'jumeirah')}>
-              <IconSearch size={20} stroke={2} /> Search
-            </button>
-          </div>
-
-          <div className="hero-marquee">
-            <span className="muted">Popular searches —</span>
-            {['Beachfront villas', 'Private pool', 'Architect homes', 'Family suites', 'City skyline apartments', 'Desert camps', 'Overwater suites'].map(t => (
-              <button key={t} className="marquee-chip" onClick={() => onBrowse('all', 'jumeirah')}>{t}</button>
-            ))}
-          </div>
+          <HeroSearch
+            onSearch={({ locationId, categoryId }) => onBrowse(categoryId, locationId)}
+            onMarqueeClick={(t) => onBrowse(t.categoryId, t.locationId)}
+          />
         </div>
       </section>
 
@@ -264,8 +240,8 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
     max-width: 560px;
     text-wrap: pretty;
   }
+  .hero-search-form { margin-top: 24px; }
   .hero-search {
-    margin-top: 24px;
     background: #fff;
     color: var(--navy);
     border-radius: 20px;
@@ -276,46 +252,32 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
     align-items: stretch;
     box-shadow: 0 24px 60px rgba(7, 7, 43, 0.25);
   }
-  .hs-field {
-    padding: 10px 16px;
-    border-radius: 12px;
-    transition: background .15s;
-    cursor: pointer;
-  }
-  .hs-field:hover { background: var(--lav-bg); }
-  .hs-field span {
+  .hero-search-form .hs-field span {
     display: block;
     font-size: 11px; font-weight: 700;
     color: var(--muted);
     letter-spacing: 0.06em;
     text-transform: uppercase;
   }
-  .hs-val {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 15px; font-weight: 600;
-    color: var(--navy);
-    margin-top: 4px;
-  }
-  .hs-cta {
+  .hero-search .hs-cta {
     background: linear-gradient(135deg, #FF5B6E, #EA3FA2 60%, #D931B8);
     color: #fff;
     border-radius: 16px;
     padding: 0 28px;
     font-size: 15px; font-weight: 700;
-    display: inline-flex; align-items: center; gap: 8px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     box-shadow: 0 10px 24px rgba(234, 63, 162, 0.35);
     transition: transform .15s, box-shadow .2s;
+    align-self: stretch;
   }
-  .hs-cta:hover { transform: translateY(-1px); box-shadow: 0 14px 30px rgba(234, 63, 162, 0.5); }
-
-  .hero-marquee {
+  .hero-search .hs-cta:hover { transform: translateY(-1px); box-shadow: 0 14px 30px rgba(234, 63, 162, 0.5); }
+  .hero-search-form .hero-marquee {
     display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
-    margin-top: 18px;
     color: rgba(255,255,255,0.85);
     font-size: 13px;
   }
-  .hero-marquee .muted { color: rgba(255,255,255,0.7); }
-  .marquee-chip {
+  .hero-search-form .hero-marquee .muted { color: rgba(255,255,255,0.7); }
+  .hero-search-form .marquee-chip {
     padding: 8px 14px;
     background: rgba(255,255,255,0.12);
     border: 1px solid rgba(255,255,255,0.2);
@@ -325,7 +287,7 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
     backdrop-filter: blur(8px);
     transition: background .15s;
   }
-  .marquee-chip:hover { background: rgba(255,255,255,0.22); }
+  .hero-search-form .marquee-chip:hover { background: rgba(255,255,255,0.22); }
 
   /* sections */
   .home-sec { padding: 64px 52px 0; }

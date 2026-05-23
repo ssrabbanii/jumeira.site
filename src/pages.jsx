@@ -1,7 +1,7 @@
 // Dedicated landing pages for top-nav items: Buy, Rent, Contact
 // (Sell uses the existing HostPage)
 
-const BuyPage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
+const BuyPage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }) => {
   const [downPct, setDownPct] = React.useState(25);
   const [propPrice, setPropPrice] = React.useState(2400000);
   const [years, setYears] = React.useState(25);
@@ -21,8 +21,8 @@ const BuyPage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
           <h1>Own a piece of <span className="grad-text">Jumeirah</span>.</h1>
           <p>Curated luxury homes in Dubai's most coveted neighbourhoods. Vetted titles, transparent fees, financing guidance.</p>
           <div className="buy-cta-row">
-            <button className="cta-pill" onClick={() => setView('listing')}>Browse all listings <IconArrowRight size={16} stroke={2} /></button>
-            <button className="ghost-btn">Talk to a buying advisor</button>
+            <button className="cta-pill" onClick={() => onBrowse('all', 'jumeirah')}>Browse all listings <IconArrowRight size={16} stroke={2} /></button>
+            <button type="button" className="ghost-btn" onClick={() => setView('contact')}>Talk to a buying advisor</button>
           </div>
           <div className="buy-trust">
             <div><strong>2,140</strong><span>Active listings</span></div>
@@ -47,7 +47,7 @@ const BuyPage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
             <h2>Featured for-sale homes</h2>
             <p className="muted">Hand-picked by our editors.</p>
           </div>
-          <button className="link-arrow" onClick={() => setView('listing')}>See all <IconArrowRight size={16} stroke={2} /></button>
+          <button className="link-arrow" onClick={() => onBrowse('villa', 'palm')}>See all <IconArrowRight size={16} stroke={2} /></button>
         </div>
         <div className="prop-grid">
           {PROPERTIES.slice(0, 3).map(p => (
@@ -121,9 +121,14 @@ const BuyPage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
   );
 };
 
-const RentPage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
+const RentPage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }) => {
   const [tenure, setTenure] = React.useState('nightly');
   const toggleBookmark = (id) => setBookmarks(prev => ({ ...prev, [id]: !prev[id] }));
+
+  const rentBrowse = () => {
+    const cat = tenure === 'yearly' ? 'house' : 'villa';
+    onBrowse(cat, 'jumeirah');
+  };
 
   return (
     <main className="rent-page">
@@ -150,7 +155,7 @@ const RentPage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
             ))}
           </div>
 
-          <button className="cta-pill big" onClick={() => setView('listing')}>Browse all {tenure} rentals <IconArrowRight size={16} stroke={2} /></button>
+          <button type="button" className="cta-pill big" onClick={rentBrowse}>Browse all {tenure} rentals <IconArrowRight size={16} stroke={2} /></button>
         </div>
       </section>
 
@@ -168,7 +173,7 @@ const RentPage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
               : 'Fully serviced 12-month leases.'
             }</p>
           </div>
-          <button className="link-arrow" onClick={() => setView('listing')}>See all <IconArrowRight size={16} stroke={2} /></button>
+          <button className="link-arrow" onClick={rentBrowse}>See all <IconArrowRight size={16} stroke={2} /></button>
         </div>
         <div className="prop-grid">
           {PROPERTIES.slice(3, 6).map(p => (
@@ -209,7 +214,7 @@ const RentPage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
           <span className="cta-eyebrow">PLANNING A LONG STAY?</span>
           <h2>Monthly rates start 18% lower.</h2>
           <p>Stay 28 nights or more and we automatically apply our long-stay discount. Tell us where and we'll handpick options.</p>
-          <button className="cta-pill" onClick={() => setView('listing')}>Find me a long stay <IconArrowRight size={16} stroke={2} /></button>
+          <button type="button" className="cta-pill" onClick={() => onBrowse('all', 'marina')}>Find me a long stay <IconArrowRight size={16} stroke={2} /></button>
         </div>
         <div className="rent-cta-art">
           <img src={PHOTOS.villa5} alt="" onError={onImgError} />
@@ -221,16 +226,34 @@ const RentPage = ({ setView, onOpenProperty, bookmarks, setBookmarks }) => {
 
 const ContactPage = ({ setView }) => {
   const [form, setForm] = React.useState({ name: '', email: '', topic: 'guest', message: '' });
-  const [sent, setSent] = React.useState(false);
+  const [showSuccess, setShowSuccess] = React.useState(false);
+  const [errors, setErrors] = React.useState({});
+
+  const validate = () => {
+    const next = {};
+    if (!form.name.trim()) next.name = 'Please enter your name';
+    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next.email = 'Enter a valid email';
+    if (!form.message.trim()) next.message = 'Please enter a message';
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
 
   const submit = (e) => {
     e.preventDefault();
-    setSent(true);
-    setTimeout(() => setSent(false), 4000);
+    if (!validate()) return;
+    setShowSuccess(true);
+    setForm({ name: '', email: '', topic: 'guest', message: '' });
+    setErrors({});
   };
 
   return (
     <main className="contact-page">
+      <SuccessModal
+        open={showSuccess}
+        title="Message sent!"
+        message="Thanks for reaching out. Our team will reply within 4 hours — usually much sooner."
+        onClose={() => setShowSuccess(false)}
+      />
       <header className="contact-head">
         <span className="cta-eyebrow">GET IN TOUCH</span>
         <h1>We're here, around the clock.</h1>
@@ -244,11 +267,26 @@ const ContactPage = ({ setView }) => {
             <div className="form-grid">
               <label className="form-field">
                 <span>Name</span>
-                <input value={form.name} onChange={e => setForm({...form, name: e.target.value})} placeholder="Your full name" required />
+                <input
+                  value={form.name}
+                  onChange={e => { setForm({...form, name: e.target.value}); setErrors({...errors, name: ''}); }}
+                  placeholder="Your full name"
+                  className={errors.name ? 'has-error' : ''}
+                  required
+                />
+                {errors.name && <span className="field-error">{errors.name}</span>}
               </label>
               <label className="form-field">
                 <span>Email</span>
-                <input type="email" value={form.email} onChange={e => setForm({...form, email: e.target.value})} placeholder="you@example.com" required />
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={e => { setForm({...form, email: e.target.value}); setErrors({...errors, email: ''}); }}
+                  placeholder="you@example.com"
+                  className={errors.email ? 'has-error' : ''}
+                  required
+                />
+                {errors.email && <span className="field-error">{errors.email}</span>}
               </label>
               <label className="form-field full">
                 <span>I'm asking about</span>
@@ -270,11 +308,19 @@ const ContactPage = ({ setView }) => {
               </label>
               <label className="form-field full">
                 <span>Message</span>
-                <textarea className="msg-input" rows={5} value={form.message} onChange={e => setForm({...form, message: e.target.value})} placeholder="Tell us a bit more…" required />
+                <textarea
+                  className={`msg-input ${errors.message ? 'has-error' : ''}`}
+                  rows={5}
+                  value={form.message}
+                  onChange={e => { setForm({...form, message: e.target.value}); setErrors({...errors, message: ''}); }}
+                  placeholder="Tell us a bit more…"
+                  required
+                />
+                {errors.message && <span className="field-error">{errors.message}</span>}
               </label>
             </div>
-            <button type="submit" className={`cta-pill big ${sent ? 'is-sent' : ''}`}>
-              {sent ? <><IconCheck size={16} stroke={2.4} /> Message sent</> : <>Send message <IconArrowRight size={16} stroke={2} /></>}
+            <button type="submit" className="cta-pill big">
+              Send message <IconArrowRight size={16} stroke={2} />
             </button>
           </form>
         </div>
@@ -284,7 +330,7 @@ const ContactPage = ({ setView }) => {
             <span className="ccs-eyebrow live">● LIVE NOW</span>
             <h3>Concierge chat</h3>
             <p>Average reply in 4 minutes. 24/7.</p>
-            <button className="cta-pill outline">Start chat</button>
+            <button type="button" className="cta-pill outline" onClick={() => setShowSuccess(true)}>Start chat</button>
           </div>
           <div className="contact-card">
             <h3>Email</h3>
@@ -551,10 +597,9 @@ const ContactPage = ({ setView }) => {
   }
   .contact-form-card h2 { font-size: 24px; font-weight: 800; margin: 0 0 22px; }
   .topic-row { display: flex; gap: 8px; flex-wrap: wrap; }
-  .cta-pill.big.is-sent {
-    background: linear-gradient(135deg, #1E9B5C, #34D17A);
-    box-shadow: 0 10px 26px rgba(30, 155, 92, 0.35);
-  }
+  .form-field input.has-error,
+  .form-field textarea.has-error { border-color: #FF5B6E; background: #FFF5F7; }
+  .field-error { display: block; font-size: 12px; color: #FF5B6E; font-weight: 600; margin-top: 6px; }
 
   .contact-side { display: flex; flex-direction: column; gap: 16px; }
   .contact-card {
