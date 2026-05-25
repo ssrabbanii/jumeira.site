@@ -593,12 +593,22 @@ const SuccessModal = ({ open, title, message, onClose }) => {
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .hs-val-icon {
-    width: 28px; height: 28px;
-    border-radius: 9px;
+    width: 32px; height: 32px;
+    border-radius: 10px;
     flex: 0 0 auto;
-    display: grid; place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: var(--lav-bg);
     color: var(--purple);
+  }
+  .hs-val-icon > svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+    margin: 0;
+    transform: none;
+    position: static;
   }
   .hs-val-copy {
     min-width: 0;
@@ -675,7 +685,7 @@ const SuccessModal = ({ open, title, message, onClose }) => {
     color: var(--muted);
   }
   .hs-panel button {
-    display: flex; align-items: center; gap: 12px;
+    display: flex; align-items: center; gap: 16px;
     width: 100%; padding: 12px 12px;
     border-radius: 14px;
     text-align: left;
@@ -718,12 +728,22 @@ const SuccessModal = ({ open, title, message, onClose }) => {
     white-space: normal;
   }
   .hs-panel-icon {
-    width: 40px; height: 40px; flex-shrink: 0;
-    border-radius: 12px;
+    width: 56px; height: 56px; flex-shrink: 0;
+    border-radius: 16px;
     background: linear-gradient(180deg, #F8F6FF 0%, #F0ECFF 100%);
     color: var(--purple);
-    display: grid; place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+  }
+  .hs-panel-icon > svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+    margin: 0;
+    transform: none;
+    position: static;
   }
   .hs-panel button.is-on .hs-panel-icon {
     background: linear-gradient(135deg, #FF5B6E 0%, #EA3FA2 60%, #D931B8 100%);
