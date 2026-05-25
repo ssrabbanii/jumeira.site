@@ -305,7 +305,7 @@ const HeroSearch = ({ onSearch, onMarqueeClick }) => {
               className={locationId === l.id ? 'is-on' : ''}
               onClick={() => { setLocationId(l.id); closePanel(); }}
             >
-              <span className="hs-panel-icon"><IconMapPin size={18} stroke={1.8} /></span>
+              <span className="hs-panel-icon" aria-hidden="true" />
               <span className="hs-panel-copy">
                 <strong>{l.area}</strong>
                 <small>{l.city}</small>
@@ -326,7 +326,6 @@ const HeroSearch = ({ onSearch, onMarqueeClick }) => {
       </div>
       <div className="hs-panel-section">
         {CATEGORIES.map((c) => {
-          const I = c.Icon;
           return (
             <button
               key={c.id}
@@ -334,7 +333,7 @@ const HeroSearch = ({ onSearch, onMarqueeClick }) => {
               className={categoryId === c.id ? 'is-on' : ''}
               onClick={() => { setCategoryId(c.id); closePanel(); }}
             >
-              <span className="hs-panel-icon"><I size={18} stroke={1.8} /></span>
+              <span className="hs-panel-icon" aria-hidden="true" />
               <span className="hs-panel-copy">
                 <strong>{c.id === 'all' ? 'All types' : c.label}</strong>
                 <small>{c.subtitle}</small>
@@ -730,24 +729,14 @@ const SuccessModal = ({ open, title, message, onClose }) => {
   .hs-panel-icon {
     width: 56px; height: 56px; flex-shrink: 0;
     border-radius: 16px;
-    background: linear-gradient(180deg, #F8F6FF 0%, #F0ECFF 100%);
-    color: var(--purple);
+    background: #f3efff;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
   }
-  .hs-panel-icon > svg {
-    width: 22px;
-    height: 22px;
-    display: block;
-    margin: 0;
-    transform: none;
-    position: static;
-  }
   .hs-panel button.is-on .hs-panel-icon {
     background: linear-gradient(135deg, #FF5B6E 0%, #EA3FA2 60%, #D931B8 100%);
-    color: #fff;
   }
   .hs-panel-check {
     width: 24px; height: 24px;
