@@ -314,20 +314,21 @@ const TourModal = ({ onComplete }) => {
   .tour-root {
     position: fixed; inset: 0;
     z-index: 260;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-  .tour-bg {
-    position: absolute; inset: 0;
     background:
       radial-gradient(900px 600px at 12% -10%, rgba(255, 91, 110, 0.18), transparent 70%),
       radial-gradient(800px 600px at 110% 10%, rgba(79, 54, 232, 0.20), transparent 70%),
       linear-gradient(180deg, #0B0B30 0%, #160F4A 60%, #2A1F7A 100%);
-    z-index: -1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+  }
+  .tour-bg {
+    display: none;
   }
   .tour-shell {
     max-width: 1100px;
     margin: 0 auto;
+    min-height: 100dvh;
     padding: 56px 32px 200px;
     color: #fff;
     animation: tourIn .5s cubic-bezier(.22,.61,.36,1);
