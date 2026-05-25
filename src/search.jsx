@@ -290,68 +290,97 @@ const HeroSearch = ({ onSearch, onMarqueeClick }) => {
   }, [openPanel]);
 
   const renderLocationPanel = () => (
-    <>
-      {LOCATIONS.map((l) => (
-        <button
-          key={l.id}
-          type="button"
-          className={locationId === l.id ? 'is-on' : ''}
-          onClick={() => { setLocationId(l.id); closePanel(); }}
-        >
-          <span className="hs-panel-icon"><IconMapPin size={18} stroke={1.8} /></span>
-          <span>
-            <strong>{l.area}</strong>
-            <small>{l.city}</small>
-          </span>
-        </button>
+    <div className="hs-panel-surface">
+      <div className="hs-panel-header">
+        <span className="hs-panel-kicker">Destinations</span>
+        <strong className="hs-panel-title">Stay where the city feels right</strong>
+      </div>
+      {CITY_GROUPS.map((group) => (
+        <div key={group.id} className="hs-panel-section">
+          <div className="hs-panel-group-label">{group.name}</div>
+          {LOCATIONS.filter((l) => l.cityGroup === group.id).map((l) => (
+            <button
+              key={l.id}
+              type="button"
+              className={locationId === l.id ? 'is-on' : ''}
+              onClick={() => { setLocationId(l.id); closePanel(); }}
+            >
+              <span className="hs-panel-icon"><IconMapPin size={18} stroke={1.8} /></span>
+              <span className="hs-panel-copy">
+                <strong>{l.area}</strong>
+                <small>{l.city}</small>
+              </span>
+              {locationId === l.id && <span className="hs-panel-check"><IconCheck size={14} stroke={2.4} /></span>}
+            </button>
+          ))}
+        </div>
       ))}
-    </>
+    </div>
   );
 
   const renderCategoryPanel = () => (
-    <>
-      {CATEGORIES.map((c) => {
-        const I = c.Icon;
-        return (
-          <button
-            key={c.id}
-            type="button"
-            className={categoryId === c.id ? 'is-on' : ''}
-            onClick={() => { setCategoryId(c.id); closePanel(); }}
-          >
-            <span className="hs-panel-icon"><I size={18} stroke={1.8} /></span>
-            <span>
-              <strong>{c.id === 'all' ? 'All types' : c.label}</strong>
-              <small>{c.subtitle}</small>
-            </span>
-          </button>
-        );
-      })}
-    </>
+    <div className="hs-panel-surface">
+      <div className="hs-panel-header">
+        <span className="hs-panel-kicker">Property types</span>
+        <strong className="hs-panel-title">Choose the stay style you want</strong>
+      </div>
+      <div className="hs-panel-section">
+        {CATEGORIES.map((c) => {
+          const I = c.Icon;
+          return (
+            <button
+              key={c.id}
+              type="button"
+              className={categoryId === c.id ? 'is-on' : ''}
+              onClick={() => { setCategoryId(c.id); closePanel(); }}
+            >
+              <span className="hs-panel-icon"><I size={18} stroke={1.8} /></span>
+              <span className="hs-panel-copy">
+                <strong>{c.id === 'all' ? 'All types' : c.label}</strong>
+                <small>{c.subtitle}</small>
+              </span>
+              {categoryId === c.id && <span className="hs-panel-check"><IconCheck size={14} stroke={2.4} /></span>}
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 
   const renderDatesPanel = () => (
-    <div className="hs-panel-dates">
-      <label>
-        <span>Check-in</span>
-        <input type="date" min={today} value={checkIn} onChange={(e) => setCheckIn(e.target.value)} />
-      </label>
-      <label>
-        <span>Check-out</span>
-        <input type="date" min={checkIn || today} value={checkOut} onChange={(e) => setCheckOut(e.target.value)} />
-      </label>
-      <button type="button" className="hs-panel-done" onClick={closePanel}>Done</button>
+    <div className="hs-panel-surface hs-panel-surface--compact">
+      <div className="hs-panel-header">
+        <span className="hs-panel-kicker">Travel dates</span>
+        <strong className="hs-panel-title">Plan your arrival and departure</strong>
+      </div>
+      <div className="hs-panel-dates">
+        <label>
+          <span>Check-in</span>
+          <input type="date" min={today} value={checkIn} onChange={(e) => setCheckIn(e.target.value)} />
+        </label>
+        <label>
+          <span>Check-out</span>
+          <input type="date" min={checkIn || today} value={checkOut} onChange={(e) => setCheckOut(e.target.value)} />
+        </label>
+        <button type="button" className="hs-panel-done" onClick={closePanel}>Done</button>
+      </div>
     </div>
   );
 
   const renderGuestsPanel = () => (
     <div className="hs-panel hs-panel-guests">
-      <div className="guest-stepper">
-        <button type="button" onClick={() => setGuests((g) => Math.max(1, g - 1))} aria-label="Fewer guests">−</button>
-        <strong>{guests}</strong>
-        <button type="button" onClick={() => setGuests((g) => Math.min(16, g + 1))} aria-label="More guests">+</button>
+      <div className="hs-panel-surface hs-panel-surface--compact">
+        <div className="hs-panel-header">
+          <span className="hs-panel-kicker">Guests</span>
+          <strong className="hs-panel-title">Set who is joining the trip</strong>
+        </div>
+        <div className="guest-stepper">
+          <button type="button" onClick={() => setGuests((g) => Math.max(1, g - 1))} aria-label="Fewer guests">−</button>
+          <strong>{guests}</strong>
+          <button type="button" onClick={() => setGuests((g) => Math.min(16, g + 1))} aria-label="More guests">+</button>
+        </div>
+        <button type="button" className="hs-panel-done" onClick={closePanel}>Done</button>
       </div>
-      <button type="button" className="hs-panel-done" onClick={closePanel}>Done</button>
     </div>
   );
 
@@ -578,60 +607,161 @@ const SuccessModal = ({ open, title, message, onClose }) => {
   .hs-panel {
     position: absolute;
     left: 0; right: 0;
-    top: calc(100% + 6px);
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    box-shadow: 0 20px 50px rgba(7, 7, 43, 0.14);
-    padding: 8px;
+    top: calc(100% + 10px);
+    background: transparent;
+    border: none;
+    border-radius: 18px;
+    box-shadow: none;
+    padding: 0;
     z-index: 30;
-    max-height: 280px;
-    overflow-y: auto;
+    max-width: 100%;
+    overflow: visible;
+  }
+  .hs-panel-surface {
+    background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%);
+    border: 1px solid rgba(79, 54, 232, 0.10);
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(7, 7, 43, 0.16), 0 8px 20px rgba(79, 54, 232, 0.05);
+    padding: 10px;
+    overflow: hidden;
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+  .hs-panel-surface--compact { padding: 14px; }
+  .hs-panel-header {
+    padding: 8px 10px 10px;
+  }
+  .hs-panel-kicker {
+    display: block;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 4px;
+  }
+  .hs-panel-title {
+    display: block;
+    font-size: 15px;
+    line-height: 1.3;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.01em;
+  }
+  .hs-panel-section + .hs-panel-section {
+    margin-top: 6px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(236, 236, 244, 0.9);
+  }
+  .hs-panel-group-label {
+    padding: 8px 10px 6px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
   }
   .hs-panel button {
-    display: flex; align-items: center; gap: 10px;
-    width: 100%; padding: 10px 12px;
-    border-radius: 10px;
+    display: flex; align-items: center; gap: 12px;
+    width: 100%; padding: 12px 12px;
+    border-radius: 14px;
     text-align: left;
-    transition: background .12s;
+    border: 1px solid transparent;
+    transition: background .15s, border-color .15s, transform .15s;
   }
-  .hs-panel button:hover { background: var(--lav-bg); }
-  .hs-panel button.is-on { background: var(--lav-soft); }
-  .hs-panel button strong { display: block; font-size: 14px; color: var(--navy); }
-  .hs-panel button small { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .hs-panel button:hover {
+    background: linear-gradient(180deg, #F8F6FF 0%, #F3F0FF 100%);
+    border-color: rgba(79, 54, 232, 0.08);
+    transform: translateY(-1px);
+  }
+  .hs-panel button.is-on {
+    background: linear-gradient(180deg, #F5F1FF 0%, #EEE8FF 100%);
+    border-color: rgba(79, 54, 232, 0.18);
+  }
+  .hs-panel-copy { min-width: 0; flex: 1; }
+  .hs-panel button strong {
+    display: block;
+    font-size: 14px;
+    color: var(--navy);
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .hs-panel button small {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    line-height: 1.35;
+  }
   .hs-panel-icon {
-    width: 36px; height: 36px; flex-shrink: 0;
-    border-radius: 10px;
-    background: var(--lav-bg);
+    width: 40px; height: 40px; flex-shrink: 0;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #F8F6FF 0%, #F0ECFF 100%);
     color: var(--purple);
     display: grid; place-items: center;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
   }
-  .hs-panel-dates { padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+  .hs-panel button.is-on .hs-panel-icon {
+    background: linear-gradient(135deg, #FF5B6E 0%, #EA3FA2 60%, #D931B8 100%);
+    color: #fff;
+  }
+  .hs-panel-check {
+    width: 24px; height: 24px;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #FF5B6E 0%, #EA3FA2 60%, #D931B8 100%);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 10px 24px rgba(234, 63, 162, 0.22);
+  }
+  .hs-panel-dates { display: flex; flex-direction: column; gap: 12px; }
   .hs-panel-dates label span { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
   .hs-panel-dates input {
-    width: 100%; height: 44px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
+    width: 100%; height: 48px;
+    border: 1px solid rgba(79, 54, 232, 0.10);
+    border-radius: 12px;
     padding: 0 12px;
+    background: #fff;
     font-family: inherit; font-size: 14px;
+    color: var(--navy);
+    box-sizing: border-box;
+  }
+  .hs-panel-dates input:focus {
+    outline: none;
+    border-color: rgba(79, 54, 232, 0.28);
+    box-shadow: 0 0 0 3px rgba(79, 54, 232, 0.08);
   }
   .hs-panel-done {
     justify-content: center;
-    font-weight: 700; color: var(--purple);
-    margin-top: 4px;
+    min-height: 48px;
+    font-weight: 800;
+    color: var(--navy);
+    background: linear-gradient(180deg, #F7F6FD 0%, #F1EFFF 100%);
+    border: 1px solid rgba(79, 54, 232, 0.08);
+    margin-top: 6px;
   }
   .guest-stepper {
     display: flex; align-items: center; justify-content: center; gap: 20px;
-    padding: 12px 0;
+    padding: 16px 0 6px;
   }
   .guest-stepper button {
-    width: 44px; height: 44px;
-    border-radius: 12px;
-    background: var(--lav-bg);
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #F7F6FD 0%, #F1EFFF 100%);
+    border: 1px solid rgba(79, 54, 232, 0.08);
     font-size: 22px; font-weight: 600;
     justify-content: center;
   }
-  .guest-stepper strong { font-size: 22px; min-width: 32px; text-align: center; }
+  .guest-stepper strong {
+    font-size: 24px;
+    min-width: 48px;
+    text-align: center;
+    color: var(--navy);
+    letter-spacing: -0.02em;
+  }
   .hs-mobile-scrim {
     position: fixed; inset: 0;
     background: rgba(7, 7, 43, 0.42);
@@ -686,6 +816,11 @@ const SuccessModal = ({ open, title, message, onClose }) => {
     box-shadow: none;
     max-height: none;
     padding: 0;
+  }
+  .hs-mobile-body .hs-panel-surface {
+    box-shadow: none;
+    border-radius: 18px;
+    border-color: rgba(79, 54, 232, 0.08);
   }
   .hs-mobile-body .hs-panel button {
     padding: 14px 12px;
