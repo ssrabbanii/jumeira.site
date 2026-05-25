@@ -402,7 +402,7 @@ const HeroSearch = ({ onSearch, onMarqueeClick }) => {
             <span className="hs-val-copy">{loc.area}, {loc.city}</span>
           </button>
           {openPanel === 'loc' && (
-            <div className="hs-panel desktop-only">{renderLocationPanel()}</div>
+            <div className="hs-panel hs-panel--location desktop-only">{renderLocationPanel()}</div>
           )}
         </div>
 
@@ -413,7 +413,7 @@ const HeroSearch = ({ onSearch, onMarqueeClick }) => {
             <span className="hs-val-copy">{cat.id === 'all' ? 'All types' : cat.label}</span>
           </button>
           {openPanel === 'cat' && (
-            <div className="hs-panel desktop-only">{renderCategoryPanel()}</div>
+            <div className="hs-panel hs-panel--property desktop-only">{renderCategoryPanel()}</div>
           )}
         </div>
 
@@ -423,7 +423,7 @@ const HeroSearch = ({ onSearch, onMarqueeClick }) => {
             <span className="hs-val-icon"><IconCalendar size={16} stroke={1.8} /></span>
             <span className="hs-val-copy">{checkIn ? formatDateRange(new Date(checkIn), checkOut ? new Date(checkOut) : null) : 'Add dates'}</span>
           </button>
-          {openPanel === 'dates' && <div className="hs-panel desktop-only">{renderDatesPanel()}</div>}
+          {openPanel === 'dates' && <div className="hs-panel hs-panel--dates desktop-only">{renderDatesPanel()}</div>}
         </div>
 
         <div className={`hs-field ${openPanel === 'guests' ? 'is-open' : ''}`}>
@@ -432,7 +432,7 @@ const HeroSearch = ({ onSearch, onMarqueeClick }) => {
             <span className="hs-val-icon"><IconUsers size={16} stroke={1.8} /></span>
             <span className="hs-val-copy">{guests} guest{guests !== 1 ? 's' : ''}</span>
           </button>
-          {openPanel === 'guests' && <div className="desktop-only">{renderGuestsPanel()}</div>}
+          {openPanel === 'guests' && <div className="hs-panel hs-panel--guests desktop-only">{renderGuestsPanel()}</div>}
         </div>
 
         <button type="button" className="hs-cta" onClick={submit}>
@@ -608,17 +608,26 @@ const SuccessModal = ({ open, title, message, onClose }) => {
   }
   .hs-panel {
     position: absolute;
-    left: 0; right: 0;
+    left: 0;
     top: calc(100% + 10px);
     margin-top: 0;
+    width: min(420px, calc(100vw - 32px));
+    min-width: min(360px, calc(100vw - 32px));
+    max-width: calc(100vw - 32px);
     background: transparent;
     border: none;
     border-radius: 18px;
     box-shadow: none;
     padding: 0;
     z-index: 999;
-    max-width: 100%;
     overflow: visible;
+  }
+  .hs-panel--dates,
+  .hs-panel--guests {
+    left: auto;
+    right: 0;
+    width: min(380px, calc(100vw - 32px));
+    min-width: min(340px, calc(100vw - 32px));
   }
   .hs-panel-surface {
     background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%);
@@ -628,6 +637,7 @@ const SuccessModal = ({ open, title, message, onClose }) => {
     padding: 10px;
     overflow: hidden;
     box-sizing: border-box;
+    width: 100%;
     max-width: 100%;
   }
   .hs-panel-surface--compact { padding: 14px; }
@@ -671,6 +681,7 @@ const SuccessModal = ({ open, title, message, onClose }) => {
     text-align: left;
     border: 1px solid transparent;
     transition: background .15s, border-color .15s, transform .15s;
+    box-sizing: border-box;
   }
   .hs-panel button:hover {
     background: linear-gradient(180deg, #F8F6FF 0%, #F3F0FF 100%);
@@ -681,15 +692,22 @@ const SuccessModal = ({ open, title, message, onClose }) => {
     background: linear-gradient(180deg, #F5F1FF 0%, #EEE8FF 100%);
     border-color: rgba(79, 54, 232, 0.18);
   }
-  .hs-panel-copy { min-width: 0; flex: 1; }
+  .hs-panel-copy {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+  }
   .hs-panel button strong {
     display: block;
     font-size: 14px;
     color: var(--navy);
     line-height: 1.3;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
   }
   .hs-panel button small {
     display: block;
@@ -697,6 +715,7 @@ const SuccessModal = ({ open, title, message, onClose }) => {
     color: var(--muted);
     margin-top: 2px;
     line-height: 1.35;
+    white-space: normal;
   }
   .hs-panel-icon {
     width: 40px; height: 40px; flex-shrink: 0;
@@ -818,6 +837,9 @@ const SuccessModal = ({ open, title, message, onClose }) => {
     border: none;
     box-shadow: none;
     max-height: none;
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
     padding: 0;
   }
   .hs-mobile-body .hs-panel-surface {
