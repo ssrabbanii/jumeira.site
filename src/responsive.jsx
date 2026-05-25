@@ -61,6 +61,7 @@
     .hero-search .hs-field {
       min-width: 0;
       padding: 12px 14px;
+      min-height: 78px;
     }
     .hero-search .hs-cta {
       grid-column: 1 / -1;
@@ -425,34 +426,39 @@
     .hero-search {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 6px;
-      padding: 8px;
-      border-radius: 16px;
+      gap: 10px;
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
     }
     .hero-search .hs-field {
       padding: 12px 14px;
       min-width: 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 12px 28px rgba(12, 12, 40, 0.08);
     }
     .hero-search .hs-val {
       min-width: 0;
       font-size: 14px;
     }
-    .hero-search .hs-panel {
-      position: fixed;
-      left: 16px; right: 16px;
-      top: auto;
-      bottom: 16px;
-      width: auto;
-      max-height: min(50vh, 360px);
-      z-index: 80;
-    }
+    .hero-search .hs-val-icon { width: 30px; height: 30px; }
     .hero-search .hs-cta {
       width: 100%;
       min-height: 52px;
       padding: 14px;
       justify-content: center;
-      margin-top: 2px;
+      margin-top: 0;
       grid-column: auto;
+    }
+    .hs-mobile-sheet {
+      left: 0;
+      right: 0;
+      max-height: min(82vh, 680px);
+    }
+    .hs-mobile-body {
+      padding: 14px 14px 18px;
     }
     .hero-search-form .hero-marquee { font-size: 12px; }
     .hero-search-form .marquee-chip { padding: 6px 12px; font-size: 12px; }

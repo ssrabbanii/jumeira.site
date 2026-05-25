@@ -256,20 +256,112 @@ const HeroSearch = ({ onSearch, onMarqueeClick }) => {
   const CatIcon = cat.Icon || IconVilla;
 
   const today = new Date().toISOString().slice(0, 10);
+  const panelTitles = {
+    loc: 'Choose location',
+    cat: 'Choose property type',
+    dates: 'Select dates',
+    guests: 'Select guests',
+  };
+  const closePanel = () => setOpenPanel(null);
 
   const submit = () => {
-    setOpenPanel(null);
+    closePanel();
     onSearch({ locationId, categoryId, guests, checkIn, checkOut });
   };
 
   React.useEffect(() => {
     if (!openPanel) return undefined;
     const onDoc = (e) => {
-      if (!e.target.closest('.hs-field') && !e.target.closest('.hs-panel')) setOpenPanel(null);
+      if (!e.target.closest('.hs-field') && !e.target.closest('.hs-panel') && !e.target.closest('.hs-mobile-sheet')) closePanel();
     };
     document.addEventListener('mousedown', onDoc);
     return () => document.removeEventListener('mousedown', onDoc);
   }, [openPanel]);
+
+  React.useEffect(() => {
+    if (!openPanel || !window.matchMedia('(max-width: 760px)').matches) return undefined;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e) => { if (e.key === 'Escape') closePanel(); };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [openPanel]);
+
+  const renderLocationPanel = () => (
+    <>
+      {LOCATIONS.map((l) => (
+        <button
+          key={l.id}
+          type="button"
+          className={locationId === l.id ? 'is-on' : ''}
+          onClick={() => { setLocationId(l.id); closePanel(); }}
+        >
+          <span className="hs-panel-icon"><IconMapPin size={18} stroke={1.8} /></span>
+          <span>
+            <strong>{l.area}</strong>
+            <small>{l.city}</small>
+          </span>
+        </button>
+      ))}
+    </>
+  );
+
+  const renderCategoryPanel = () => (
+    <>
+      {CATEGORIES.map((c) => {
+        const I = c.Icon;
+        return (
+          <button
+            key={c.id}
+            type="button"
+            className={categoryId === c.id ? 'is-on' : ''}
+            onClick={() => { setCategoryId(c.id); closePanel(); }}
+          >
+            <span className="hs-panel-icon"><I size={18} stroke={1.8} /></span>
+            <span>
+              <strong>{c.id === 'all' ? 'All types' : c.label}</strong>
+              <small>{c.subtitle}</small>
+            </span>
+          </button>
+        );
+      })}
+    </>
+  );
+
+  const renderDatesPanel = () => (
+    <div className="hs-panel-dates">
+      <label>
+        <span>Check-in</span>
+        <input type="date" min={today} value={checkIn} onChange={(e) => setCheckIn(e.target.value)} />
+      </label>
+      <label>
+        <span>Check-out</span>
+        <input type="date" min={checkIn || today} value={checkOut} onChange={(e) => setCheckOut(e.target.value)} />
+      </label>
+      <button type="button" className="hs-panel-done" onClick={closePanel}>Done</button>
+    </div>
+  );
+
+  const renderGuestsPanel = () => (
+    <div className="hs-panel hs-panel-guests">
+      <div className="guest-stepper">
+        <button type="button" onClick={() => setGuests((g) => Math.max(1, g - 1))} aria-label="Fewer guests">−</button>
+        <strong>{guests}</strong>
+        <button type="button" onClick={() => setGuests((g) => Math.min(16, g + 1))} aria-label="More guests">+</button>
+      </div>
+      <button type="button" className="hs-panel-done" onClick={closePanel}>Done</button>
+    </div>
+  );
+
+  const renderPanelContent = (panel) => {
+    if (panel === 'loc') return renderLocationPanel();
+    if (panel === 'cat') return renderCategoryPanel();
+    if (panel === 'dates') return renderDatesPanel();
+    if (panel === 'guests') return renderGuestsPanel();
+    return null;
+  };
 
   return (
     <div className="hero-search-form">
@@ -277,92 +369,63 @@ const HeroSearch = ({ onSearch, onMarqueeClick }) => {
         <div className={`hs-field ${openPanel === 'loc' ? 'is-open' : ''}`}>
           <span>Location</span>
           <button type="button" className="hs-val" onClick={() => setOpenPanel(openPanel === 'loc' ? null : 'loc')}>
-            <IconMapPin size={16} stroke={1.8} /> {loc.area}, {loc.city}
+            <span className="hs-val-icon"><IconMapPin size={16} stroke={1.8} /></span>
+            <span className="hs-val-copy">{loc.area}, {loc.city}</span>
           </button>
           {openPanel === 'loc' && (
-            <div className="hs-panel">
-              {LOCATIONS.map((l) => (
-                <button
-                  key={l.id}
-                  type="button"
-                  className={locationId === l.id ? 'is-on' : ''}
-                  onClick={() => { setLocationId(l.id); setOpenPanel(null); }}
-                >
-                  <strong>{l.area}</strong>
-                  <small>{l.city}</small>
-                </button>
-              ))}
-            </div>
+            <div className="hs-panel desktop-only">{renderLocationPanel()}</div>
           )}
         </div>
 
         <div className={`hs-field ${openPanel === 'cat' ? 'is-open' : ''}`}>
           <span>Property</span>
           <button type="button" className="hs-val" onClick={() => setOpenPanel(openPanel === 'cat' ? null : 'cat')}>
-            <CatIcon size={16} stroke={1.8} /> {cat.id === 'all' ? 'All types' : cat.label}
+            <span className="hs-val-icon"><CatIcon size={16} stroke={1.8} /></span>
+            <span className="hs-val-copy">{cat.id === 'all' ? 'All types' : cat.label}</span>
           </button>
           {openPanel === 'cat' && (
-            <div className="hs-panel">
-              {CATEGORIES.map((c) => {
-                const I = c.Icon;
-                return (
-                  <button
-                    key={c.id}
-                    type="button"
-                    className={categoryId === c.id ? 'is-on' : ''}
-                    onClick={() => { setCategoryId(c.id); setOpenPanel(null); }}
-                  >
-                    <span className="hs-panel-icon"><I size={18} stroke={1.8} /></span>
-                    <span><strong>{c.id === 'all' ? 'All types' : c.label}</strong><small>{c.subtitle}</small></span>
-                  </button>
-                );
-              })}
-            </div>
+            <div className="hs-panel desktop-only">{renderCategoryPanel()}</div>
           )}
         </div>
 
         <div className={`hs-field hs-field-dates ${openPanel === 'dates' ? 'is-open' : ''}`}>
           <span>Dates</span>
           <button type="button" className="hs-val" onClick={() => setOpenPanel(openPanel === 'dates' ? null : 'dates')}>
-            <IconCalendar size={16} stroke={1.8} />
-            {checkIn ? formatDateRange(new Date(checkIn), checkOut ? new Date(checkOut) : null) : 'Add dates'}
+            <span className="hs-val-icon"><IconCalendar size={16} stroke={1.8} /></span>
+            <span className="hs-val-copy">{checkIn ? formatDateRange(new Date(checkIn), checkOut ? new Date(checkOut) : null) : 'Add dates'}</span>
           </button>
-          {openPanel === 'dates' && (
-            <div className="hs-panel hs-panel-dates">
-              <label>
-                <span>Check-in</span>
-                <input type="date" min={today} value={checkIn} onChange={(e) => setCheckIn(e.target.value)} />
-              </label>
-              <label>
-                <span>Check-out</span>
-                <input type="date" min={checkIn || today} value={checkOut} onChange={(e) => setCheckOut(e.target.value)} />
-              </label>
-              <button type="button" className="hs-panel-done" onClick={() => setOpenPanel(null)}>Done</button>
-            </div>
-          )}
+          {openPanel === 'dates' && <div className="hs-panel desktop-only">{renderDatesPanel()}</div>}
         </div>
 
         <div className={`hs-field ${openPanel === 'guests' ? 'is-open' : ''}`}>
           <span>Guests</span>
           <button type="button" className="hs-val" onClick={() => setOpenPanel(openPanel === 'guests' ? null : 'guests')}>
-            <IconUsers size={16} stroke={1.8} /> {guests} guest{guests !== 1 ? 's' : ''}
+            <span className="hs-val-icon"><IconUsers size={16} stroke={1.8} /></span>
+            <span className="hs-val-copy">{guests} guest{guests !== 1 ? 's' : ''}</span>
           </button>
-          {openPanel === 'guests' && (
-            <div className="hs-panel hs-panel-guests">
-              <div className="guest-stepper">
-                <button type="button" onClick={() => setGuests((g) => Math.max(1, g - 1))} aria-label="Fewer guests">−</button>
-                <strong>{guests}</strong>
-                <button type="button" onClick={() => setGuests((g) => Math.min(16, g + 1))} aria-label="More guests">+</button>
-              </div>
-              <button type="button" className="hs-panel-done" onClick={() => setOpenPanel(null)}>Done</button>
-            </div>
-          )}
+          {openPanel === 'guests' && <div className="desktop-only">{renderGuestsPanel()}</div>}
         </div>
 
         <button type="button" className="hs-cta" onClick={submit}>
           <IconSearch size={20} stroke={2} /> Search
         </button>
       </div>
+
+      {openPanel && (
+        <>
+          <button type="button" className="hs-mobile-scrim mobile-only" aria-label="Close options" onClick={closePanel} />
+          <div className="hs-mobile-sheet mobile-only" role="dialog" aria-modal="true" aria-label={panelTitles[openPanel]}>
+            <div className="hs-mobile-handle" />
+            <div className="hs-mobile-head">
+              <h3>{panelTitles[openPanel]}</h3>
+              <button type="button" className="icon-btn" onClick={closePanel} aria-label="Close">
+                <IconClose size={20} />
+              </button>
+            </div>
+            <div className="hs-mobile-body">{renderPanelContent(openPanel)}</div>
+          </div>
+        </>
+      )}
 
       <div className="hero-marquee">
         <span className="muted">Popular searches —</span>
@@ -479,13 +542,38 @@ const SuccessModal = ({ open, title, message, onClose }) => {
 
   .hero-search-form .hero-marquee { margin-top: 18px; }
 
-  .hs-field { position: relative; padding: 10px 16px; border-radius: 12px; transition: background .15s; }
-  .hs-field:hover, .hs-field.is-open { background: var(--lav-bg); }
+  .hs-field {
+    position: relative;
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    transition: background .15s, border-color .15s, box-shadow .15s;
+  }
+  .hs-field:hover { background: var(--lav-bg); }
+  .hs-field.is-open {
+    background: #fff;
+    border-color: rgba(79, 54, 232, 0.18);
+    box-shadow: 0 12px 30px rgba(79, 54, 232, 0.08);
+  }
   .hs-field button.hs-val {
     display: inline-flex; align-items: center; gap: 6px;
     font-size: 15px; font-weight: 600; color: var(--navy);
     margin-top: 4px; text-align: left; width: 100%;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .hs-val-icon {
+    width: 28px; height: 28px;
+    border-radius: 9px;
+    flex: 0 0 auto;
+    display: grid; place-items: center;
+    background: var(--lav-bg);
+    color: var(--purple);
+  }
+  .hs-val-copy {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .hs-panel {
     position: absolute;
@@ -544,6 +632,82 @@ const SuccessModal = ({ open, title, message, onClose }) => {
     justify-content: center;
   }
   .guest-stepper strong { font-size: 22px; min-width: 32px; text-align: center; }
+  .hs-mobile-scrim {
+    position: fixed; inset: 0;
+    background: rgba(7, 7, 43, 0.42);
+    backdrop-filter: blur(4px);
+    z-index: 140;
+    animation: fadeIn .18s ease;
+  }
+  .hs-mobile-sheet {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 141;
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    box-shadow: 0 -20px 50px rgba(7, 7, 43, 0.22);
+    max-height: min(78vh, 640px);
+    display: flex;
+    flex-direction: column;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    animation: sheetUp .24s cubic-bezier(.22,.61,.36,1);
+  }
+  .hs-mobile-handle {
+    width: 44px; height: 4px;
+    border-radius: 999px;
+    background: #D8D8E6;
+    margin: 10px auto 0;
+    flex: 0 0 auto;
+  }
+  .hs-mobile-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px 12px;
+    border-bottom: 1px solid var(--border);
+    flex: 0 0 auto;
+  }
+  .hs-mobile-head h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.02em;
+  }
+  .hs-mobile-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 16px 18px;
+  }
+  .hs-mobile-body .hs-panel {
+    position: static;
+    border: none;
+    box-shadow: none;
+    max-height: none;
+    padding: 0;
+  }
+  .hs-mobile-body .hs-panel button {
+    padding: 14px 12px;
+    border-radius: 14px;
+  }
+  .hs-mobile-body .hs-panel-dates {
+    padding: 0;
+    gap: 14px;
+  }
+  .hs-mobile-body .hs-panel-dates input {
+    height: 48px;
+    font-size: 16px;
+  }
+  .hs-mobile-body .guest-stepper {
+    padding: 18px 0 10px;
+  }
+  .hs-mobile-body .hs-panel-done {
+    min-height: 48px;
+    border-radius: 12px;
+    background: var(--lav-bg);
+    margin-top: 10px;
+  }
 
   .success-scrim {
     position: fixed; inset: 0;
