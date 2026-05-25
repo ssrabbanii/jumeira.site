@@ -246,12 +246,13 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
     color: var(--navy);
     border-radius: 20px;
     display: grid;
-    grid-template-columns: 1.2fr 1fr 1.2fr 1fr auto;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1fr) auto;
     padding: 8px;
     gap: 4px;
     align-items: stretch;
     box-shadow: 0 24px 60px rgba(7, 7, 43, 0.25);
   }
+  .hero-search .hs-field { min-width: 0; }
   .hero-search-form .hs-field span {
     display: block;
     font-size: 11px; font-weight: 700;

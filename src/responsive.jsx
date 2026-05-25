@@ -53,8 +53,19 @@
     .hero { margin: 20px 24px 0; min-height: auto; }
     .hero-inner { padding: 36px 36px 30px; }
     .hero h1 { font-size: 44px; }
-    .hero-search { grid-template-columns: 1fr 1fr auto; gap: 6px; }
-    .hero-search .hs-field:nth-child(3), .hero-search .hs-field:nth-child(4) { grid-column: span 1; }
+    .hero-search {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      align-items: stretch;
+    }
+    .hero-search .hs-field {
+      min-width: 0;
+      padding: 12px 14px;
+    }
+    .hero-search .hs-cta {
+      grid-column: 1 / -1;
+      min-height: 56px;
+    }
     .cat-cards { grid-template-columns: repeat(3, 1fr); }
     .dest-grid, .dest-grid-expanded { grid-template-columns: repeat(3, 1fr); grid-template-rows: auto; }
     .dest-grid-expanded .dest-card.is-tall { grid-row: span 1; height: 220px; }
@@ -411,17 +422,38 @@
     .hero-sub { font-size: 14px; }
     .hero-eyebrow { font-size: 11px; padding: 6px 12px; }
     .hero-search-form { margin-top: 18px; }
-    .hero-search { display: flex; flex-direction: column; gap: 4px; padding: 8px; border-radius: 16px; }
-    .hero-search .hs-field { padding: 10px 14px; }
+    .hero-search {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      padding: 8px;
+      border-radius: 16px;
+    }
+    .hero-search .hs-field {
+      padding: 12px 14px;
+      min-width: 0;
+    }
+    .hero-search .hs-val {
+      min-width: 0;
+      font-size: 14px;
+    }
     .hero-search .hs-panel {
       position: fixed;
       left: 16px; right: 16px;
       top: auto;
       bottom: 16px;
-      max-height: 50vh;
+      width: auto;
+      max-height: min(50vh, 360px);
       z-index: 80;
     }
-    .hero-search .hs-cta { width: 100%; padding: 14px; justify-content: center; margin-top: 4px; }
+    .hero-search .hs-cta {
+      width: 100%;
+      min-height: 52px;
+      padding: 14px;
+      justify-content: center;
+      margin-top: 2px;
+      grid-column: auto;
+    }
     .hero-search-form .hero-marquee { font-size: 12px; }
     .hero-search-form .marquee-chip { padding: 6px 12px; font-size: 12px; }
 
