@@ -81,6 +81,16 @@ const readRouteFromUrl = () => {
 
 const App = () => {
   const initialRoute = readRouteFromUrl();
+  const isIntroLocked = () => {
+    try {
+      return (
+        sessionStorage.getItem('jumeira.disclaimerSeen') !== '1' ||
+        sessionStorage.getItem('jumeira.tourSeenV2') !== '1'
+      );
+    } catch (e) {
+      return true;
+    }
+  };
   const [view, setView] = React.useState(initialRoute.view || 'listing');
   const [searchValue, setSearchValue] = React.useState('');
   const [listingQuery, setListingQuery] = React.useState('');
@@ -91,6 +101,7 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = React.useState(true);
   const [accountTab, setAccountTab] = React.useState('trips');
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [introLocked, setIntroLocked] = React.useState(isIntroLocked);
 
   const syncListingUrl = React.useCallback((categoryId, locationId) => {
     const path = buildListingPath(categoryId, locationId);
@@ -148,6 +159,13 @@ const App = () => {
     if (view === 'listing') syncListingUrl(activeCategory, activeLocation);
   }, []);
 
+  React.useEffect(() => {
+    const checkIntroLock = () => setIntroLocked(isIntroLocked());
+    checkIntroLock();
+    const id = window.setInterval(checkIntroLock, 250);
+    return () => window.clearInterval(id);
+  }, []);
+
   const goView = (v) => {
     setView(v);
     const staticPaths = {
@@ -187,136 +205,139 @@ const App = () => {
 
   return (
     <div className={`app density-${t.density} ${t.showLabels ? '' : 'hide-labels'}`} data-screen-label={`Jumeira · ${view}`}>
-      <TopNav
-        view={view}
-        setView={goView}
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-        onSearchSelect={handleSearchSelect}
-        isLoggedIn={isLoggedIn}
-        onLogout={() => { setIsLoggedIn(false); goView('home'); }}
-        onAccountTab={goAccountTab}
-      />
-      {(view === 'listing' || view === 'home') && (
-        <CategoryNav
-          activeCategory={activeCategory}
-          activeLocation={activeLocation}
-          onSelectCategory={(c) => browseListing(c, activeLocation)}
-          onSelectLocation={(loc) => browseListing(activeCategory, loc)}
-        />
-      )}
-
-      {view === 'listing' && (
-        <ListingPage
-          onOpenProperty={openProperty}
-          activeCategory={activeCategory}
-          activeLocation={activeLocation}
-          listingQuery={listingQuery}
-          bookmarks={bookmarks}
-          setBookmarks={setBookmarks}
-        />
-      )}
-      {view === 'detail' && (
-        <DetailPage
-          property={activeProperty || PROPERTIES[0]}
-          onBack={() => goView('listing')}
-          onReserve={() => goView('checkout')}
-          bookmarks={bookmarks}
-          setBookmarks={setBookmarks}
-        />
-      )}
-      {view === 'checkout' && (
-        <CheckoutPage
-          property={activeProperty || PROPERTIES[0]}
+      <div className={`app-shell ${introLocked ? 'is-locked' : ''}`} aria-hidden={introLocked}>
+        <TopNav
+          view={view}
           setView={goView}
-          goToTrips={() => goAccountTab('trips')}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+          onSearchSelect={handleSearchSelect}
+          isLoggedIn={isLoggedIn}
+          onLogout={() => { setIsLoggedIn(false); goView('home'); }}
+          onAccountTab={goAccountTab}
         />
-      )}
-      {view === 'home' && (
-        <HomePage
-          setView={goView}
-          onBrowse={browseListing}
-          onOpenProperty={openProperty}
-          bookmarks={bookmarks}
-          setBookmarks={setBookmarks}
-        />
-      )}
-      {view === 'login' && (
-        <LoginPage setView={goView} onLogin={() => { setIsLoggedIn(true); goView('home'); }} />
-      )}
-      {view === 'host' && <HostPage setView={goView} />}
-      {view === 'host-dash' && <HostDashboard setView={goView} />}
-      {view === 'list' && <ListPropertyPage setView={goView} />}
-      {view === 'account' && (
-        <AccountPage
-          initialTab={accountTab}
-          bookmarks={bookmarks}
-          setBookmarks={setBookmarks}
-          onOpenProperty={openProperty}
-        />
-      )}
-      {view === 'buy' && (
-        <BuyPage
-          setView={goView}
-          onBrowse={browseListing}
-          onOpenProperty={openProperty}
-          bookmarks={bookmarks}
-          setBookmarks={setBookmarks}
-        />
-      )}
-      {view === 'rent' && (
-        <RentPage
-          setView={goView}
-          onBrowse={browseListing}
-          onOpenProperty={openProperty}
-          bookmarks={bookmarks}
-          setBookmarks={setBookmarks}
-        />
-      )}
-      {view === 'contact' && <ContactPage setView={goView} />}
-
-      <Footer setView={goView} />
-      <FontSwitcher />
-      <DisclaimerModal />
-      <TourModal />
-
-      <TweaksPanel title="Tweaks">
-        <TweakSection label="Brand accent">
-          <TweakColor
-            label="Palette"
-            value={ACCENT_PRESETS[t.accentMode] ? [ACCENT_PRESETS[t.accentMode].coral, ACCENT_PRESETS[t.accentMode].magenta, ACCENT_PRESETS[t.accentMode].deep] : ACCENT_PRESETS.pink}
-            options={[
-              ['#FF5B6E', '#EA3FA2', '#D931B8'],
-              ['#3FBDFF', '#4F36E8', '#2A1FA8'],
-              ['#FFB152', '#FF5B6E', '#D9358F'],
-              ['#6BE0A8', '#1E9B5C', '#0A5C3B'],
-            ]}
-            onChange={(v) => {
-              const i = ['#FF5B6E', '#3FBDFF', '#FFB152', '#6BE0A8'].indexOf(v[0]);
-              setTweak('accentMode', ['pink','ocean','sunset','forest'][i] || 'pink');
-            }}
+        {(view === 'listing' || view === 'home') && (
+          <CategoryNav
+            activeCategory={activeCategory}
+            activeLocation={activeLocation}
+            onSelectCategory={(c) => browseListing(c, activeLocation)}
+            onSelectLocation={(loc) => browseListing(activeCategory, loc)}
           />
-        </TweakSection>
-        <TweakSection label="Cards">
-          <TweakSlider label="Card radius" value={t.cardRadius} min={6} max={36} step={2} unit="px" onChange={(v) => setTweak('cardRadius', v)} />
-          <TweakSlider label="Image height" value={t.imageHeight} min={160} max={300} step={4} unit="px" onChange={(v) => setTweak('imageHeight', v)} />
-          <TweakRadio label="Density" value={t.density} options={['compact','comfortable']} onChange={(v) => setTweak('density', v)} />
-          <TweakToggle label="Show 'VILLA' label" value={t.showLabels} onChange={(v) => setTweak('showLabels', v)} />
-        </TweakSection>
-        <TweakSection label="Jump to">
-          <TweakButton label="Homepage" onClick={() => goView('home')} />
-          <TweakButton label="Listing / search" onClick={() => goView('listing')} />
-          <TweakButton label="Property detail" onClick={() => goView('detail')} />
-          <TweakButton label="Checkout" onClick={() => goView('checkout')} />
-          <TweakButton label="My account" onClick={() => goAccountTab('trips')} />
-          <TweakButton label="Inbox" onClick={() => goAccountTab('inbox')} />
-          <TweakButton label="Saved homes" onClick={() => goAccountTab('saved')} />
-          <TweakButton label="Login" onClick={() => goView('login')} />
-          <TweakButton label="Host landing" onClick={() => goView('host')} />
-          <TweakButton label="Host dashboard" onClick={() => goView('host-dash')} />
-          <TweakButton label="List a property" onClick={() => goView('list')} />
-        </TweakSection>
-      </TweaksPanel>
+        )}
+
+        {view === 'listing' && (
+          <ListingPage
+            onOpenProperty={openProperty}
+            activeCategory={activeCategory}
+            activeLocation={activeLocation}
+            listingQuery={listingQuery}
+            bookmarks={bookmarks}
+            setBookmarks={setBookmarks}
+          />
+        )}
+        {view === 'detail' && (
+          <DetailPage
+            property={activeProperty || PROPERTIES[0]}
+            onBack={() => goView('listing')}
+            onReserve={() => goView('checkout')}
+            bookmarks={bookmarks}
+            setBookmarks={setBookmarks}
+          />
+        )}
+        {view === 'checkout' && (
+          <CheckoutPage
+            property={activeProperty || PROPERTIES[0]}
+            setView={goView}
+            goToTrips={() => goAccountTab('trips')}
+          />
+        )}
+        {view === 'home' && (
+          <HomePage
+            setView={goView}
+            onBrowse={browseListing}
+            onOpenProperty={openProperty}
+            bookmarks={bookmarks}
+            setBookmarks={setBookmarks}
+          />
+        )}
+        {view === 'login' && (
+          <LoginPage setView={goView} onLogin={() => { setIsLoggedIn(true); goView('home'); }} />
+        )}
+        {view === 'host' && <HostPage setView={goView} />}
+        {view === 'host-dash' && <HostDashboard setView={goView} />}
+        {view === 'list' && <ListPropertyPage setView={goView} />}
+        {view === 'account' && (
+          <AccountPage
+            initialTab={accountTab}
+            bookmarks={bookmarks}
+            setBookmarks={setBookmarks}
+            onOpenProperty={openProperty}
+          />
+        )}
+        {view === 'buy' && (
+          <BuyPage
+            setView={goView}
+            onBrowse={browseListing}
+            onOpenProperty={openProperty}
+            bookmarks={bookmarks}
+            setBookmarks={setBookmarks}
+          />
+        )}
+        {view === 'rent' && (
+          <RentPage
+            setView={goView}
+            onBrowse={browseListing}
+            onOpenProperty={openProperty}
+            bookmarks={bookmarks}
+            setBookmarks={setBookmarks}
+          />
+        )}
+        {view === 'contact' && <ContactPage setView={goView} />}
+
+        <Footer setView={goView} />
+        <FontSwitcher />
+
+        <TweaksPanel title="Tweaks">
+          <TweakSection label="Brand accent">
+            <TweakColor
+              label="Palette"
+              value={ACCENT_PRESETS[t.accentMode] ? [ACCENT_PRESETS[t.accentMode].coral, ACCENT_PRESETS[t.accentMode].magenta, ACCENT_PRESETS[t.accentMode].deep] : ACCENT_PRESETS.pink}
+              options={[
+                ['#FF5B6E', '#EA3FA2', '#D931B8'],
+                ['#3FBDFF', '#4F36E8', '#2A1FA8'],
+                ['#FFB152', '#FF5B6E', '#D9358F'],
+                ['#6BE0A8', '#1E9B5C', '#0A5C3B'],
+              ]}
+              onChange={(v) => {
+                const i = ['#FF5B6E', '#3FBDFF', '#FFB152', '#6BE0A8'].indexOf(v[0]);
+                setTweak('accentMode', ['pink','ocean','sunset','forest'][i] || 'pink');
+              }}
+            />
+          </TweakSection>
+          <TweakSection label="Cards">
+            <TweakSlider label="Card radius" value={t.cardRadius} min={6} max={36} step={2} unit="px" onChange={(v) => setTweak('cardRadius', v)} />
+            <TweakSlider label="Image height" value={t.imageHeight} min={160} max={300} step={4} unit="px" onChange={(v) => setTweak('imageHeight', v)} />
+            <TweakRadio label="Density" value={t.density} options={['compact','comfortable']} onChange={(v) => setTweak('density', v)} />
+            <TweakToggle label="Show 'VILLA' label" value={t.showLabels} onChange={(v) => setTweak('showLabels', v)} />
+          </TweakSection>
+          <TweakSection label="Jump to">
+            <TweakButton label="Homepage" onClick={() => goView('home')} />
+            <TweakButton label="Listing / search" onClick={() => goView('listing')} />
+            <TweakButton label="Property detail" onClick={() => goView('detail')} />
+            <TweakButton label="Checkout" onClick={() => goView('checkout')} />
+            <TweakButton label="My account" onClick={() => goAccountTab('trips')} />
+            <TweakButton label="Inbox" onClick={() => goAccountTab('inbox')} />
+            <TweakButton label="Saved homes" onClick={() => goAccountTab('saved')} />
+            <TweakButton label="Login" onClick={() => goView('login')} />
+            <TweakButton label="Host landing" onClick={() => goView('host')} />
+            <TweakButton label="Host dashboard" onClick={() => goView('host-dash')} />
+            <TweakButton label="List a property" onClick={() => goView('list')} />
+          </TweakSection>
+        </TweaksPanel>
+      </div>
+
+      <DisclaimerModal />
+      <TourModal onComplete={() => setIntroLocked(false)} />
     </div>
   );
 };
@@ -337,6 +358,7 @@ const App = () => {
   .app .prop-label[data-hide] { display: none; }
   .app.hide-labels .prop-label { display: none; }
   .app.hide-labels .prop-title { margin-top: 0; }
+  .app-shell.is-locked { display: none; }
 
   .placeholder-page { max-width: 1440px; margin: 0 auto; padding: 80px 52px; min-height: 50vh; }
   .placeholder-card {
