@@ -577,12 +577,14 @@ const SuccessModal = ({ open, title, message, onClose }) => {
     border-radius: 12px;
     border: 1px solid transparent;
     transition: background .15s, border-color .15s, box-shadow .15s;
+    z-index: 1;
   }
   .hs-field:hover { background: var(--lav-bg); }
   .hs-field.is-open {
     background: #fff;
     border-color: rgba(79, 54, 232, 0.18);
     box-shadow: 0 12px 30px rgba(79, 54, 232, 0.08);
+    z-index: 80;
   }
   .hs-field button.hs-val {
     display: inline-flex; align-items: center; gap: 6px;
@@ -608,12 +610,13 @@ const SuccessModal = ({ open, title, message, onClose }) => {
     position: absolute;
     left: 0; right: 0;
     top: calc(100% + 10px);
+    margin-top: 0;
     background: transparent;
     border: none;
     border-radius: 18px;
     box-shadow: none;
     padding: 0;
-    z-index: 30;
+    z-index: 999;
     max-width: 100%;
     overflow: visible;
   }

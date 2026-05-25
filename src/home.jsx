@@ -16,9 +16,11 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
   return (
     <main className="home">
       <section className="hero">
-        <div className="hero-bg">
-          <img src={PHOTO_POOL[2]} alt="" onError={onImgError} />
-          <div className="hero-overlay" />
+        <div className="hero-media">
+          <div className="hero-bg">
+            <img src={PHOTO_POOL[2]} alt="" onError={onImgError} />
+            <div className="hero-overlay" />
+          </div>
         </div>
         <div className="hero-inner">
           <div className="hero-eyebrow">
@@ -191,11 +193,18 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
   .hero {
     position: relative;
     margin: 24px 52px 0;
-    border-radius: 28px;
-    overflow: hidden;
+    overflow: visible;
     min-height: 480px;
     color: #fff;
     isolation: isolate;
+    z-index: 1;
+  }
+  .hero-media {
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
+    overflow: hidden;
+    z-index: 0;
   }
   .hero-bg { position: absolute; inset: 0; }
   .hero-bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -208,6 +217,8 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
     position: relative;
     padding: 48px 56px 40px;
     max-width: 920px;
+    z-index: 2;
+    overflow: visible;
   }
   .hero-eyebrow {
     display: inline-flex; align-items: center; gap: 10px;
@@ -240,7 +251,12 @@ const HomePage = ({ setView, onBrowse, onOpenProperty, bookmarks, setBookmarks }
     max-width: 560px;
     text-wrap: pretty;
   }
-  .hero-search-form { margin-top: 24px; }
+  .hero-search-form {
+    margin-top: 24px;
+    position: relative;
+    z-index: 40;
+    overflow: visible;
+  }
   .hero-search {
     background: #fff;
     color: var(--navy);
